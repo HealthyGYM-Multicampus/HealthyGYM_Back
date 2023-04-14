@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mul.HealthyGYM.Dao.FreeBbsDao">
+	
+	<select id="freeBbsDetail" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.BbsDto">
+		select *
+		from bbs
+		where bbs_seq=#{bbs_seq}
+	</select>
+	
+	<insert id="writeBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
+		insert into bbs(member_seq, title, content, bbs_tag)
+		values(#{member_seq}, #{title}, #{content}, #{bbs_tag})
+	</insert>
+	
+	<insert id="uploadFile" parameterType="String">
+		insert into imgfile(imgfile_name)
+		values(#{filename})
+	</insert>
+</mapper>
