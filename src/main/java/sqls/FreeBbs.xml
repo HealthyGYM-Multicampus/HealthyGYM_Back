@@ -4,19 +4,49 @@
 
 <mapper namespace="com.mul.HealthyGYM.Dao.FreeBbsDao">
 	
-	<select id="freeBbsDetail" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.BbsDto">
-		select *
-		from bbs
-		where bbs_seq=#{bbs_seq}
+	<select id="freeBbsDetail" parameterType="Integer" resultType="map">
+		select bbsseq, title, content, wdate, likecount, readcount, del, bbstag,
+		b.memberseq, b.nickname
+		from bbs a, member b
+		where a.memberseq=b.memberseq
+		and bbsseq=#{bbsseq}
+	</select>
+	
+	<select id="checkLike" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
+		select EXISTS(select *
+		from like_bbs
+		where memberseq=#{memberseq} and bbsseq=#{bbsseq}) as success
+	</select>
+	
+	<select id="freeBbsComment" parameterType="Integer" resultType="map">
+		select commentseq, cmtcontent, regdate, step, ref,
+		b.memberseq, b.nickname, b.profile
+		from bbs_comment a, member b
+		where a.memberseq=b.memberseq
+		and bbsseq=#{bbsseq}
+		and cmtdel=0
+		order by ref desc, step
 	</select>
 	
 	<insert id="writeBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
-		insert into bbs(member_seq, title, content, bbs_tag)
-		values(#{member_seq}, #{title}, #{content}, #{bbs_tag})
+		insert into bbs(memberseq, title, content, bbstag)
+		values(#{memberseq}, #{title}, #{content}, #{bbstag})
 	</insert>
 	
+	<insert id="likeBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
+		insert into like_bbs
+		values(#{memberseq}, #{bbsseq})
+	</insert>
+	
+	<update id="likecount" parameterType="Integer">
+		update bbs
+		set likecount=likecount+1
+		where bbsseq=#{bbsseq}
+	</update>
+	
+	
 	<insert id="uploadFile" parameterType="String">
-		insert into imgfile(imgfile_name)
+		insert into imgfile(imgfilename)
 		values(#{filename})
 	</insert>
 </mapper>

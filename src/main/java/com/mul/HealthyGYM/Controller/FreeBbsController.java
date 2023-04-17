@@ -3,6 +3,8 @@ package com.mul.HealthyGYM.Controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,25 @@ public class FreeBbsController {
 	FreeBbsService service;
 	
 	@GetMapping("/freebbsdetail")
-	public BbsDto freebbsdetail(int bbs_seq) {
-		System.out.println("freebbsdetail " + new Date());
-		return service.freeBbsDetail(bbs_seq);
+	public List<Map<String, Object>> freebbsdetail(int bbsseq) {
+		System.out.println("freebbsdetail " + bbsseq + " " + new Date());
+		
+		return service.freeBbsDetail(bbsseq);
 	}
+	
+	@GetMapping("/freebbscomment")
+	public List<Map<String, Object>> freebbscomment(int bbsseq) {
+		System.out.println("freebbscomment "+ bbsseq + " " + new Date());
+		
+		return service.freeBbsComment(bbsseq);
+	}
+	
 	
 	@PostMapping("/writefreebbs")
 	public String writefreebbs(BbsDto dto) {
 		System.out.println("writefreebbs " + new Date());
+		System.out.println(dto.toString());
+		
 		if(service.writeBbs(dto)) {
 			return "OK";
 		} else {
@@ -40,6 +53,13 @@ public class FreeBbsController {
 		}
 	}
 	
+	@PostMapping("/likebbs")
+	public String likebbs(BbsDto dto) {
+		System.out.println("likebbs " + new Date());
+		
+		return "";
+	}
+
 	// 사용 안함 (파이어베이스로 대체함)
 	@PostMapping("/uploadfile")
 	public String uploadfile(@RequestParam(value = "imgfile", required = false) MultipartFile imgfile, HttpServletRequest req) throws IOException {

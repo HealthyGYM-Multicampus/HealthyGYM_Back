@@ -1,5 +1,8 @@
 package com.mul.HealthyGYM.Service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +17,12 @@ public class FreeBbsService {
 	@Autowired
 	FreeBbsDao dao;
 	
-	public BbsDto freeBbsDetail(int bbs_seq) {
-		return dao.freeBbsDetail(bbs_seq);
+	public List<Map<String, Object>> freeBbsDetail(int bbsseq) {
+		return dao.freeBbsDetail(bbsseq);
+	}
+	
+	public List<Map<String, Object>> freeBbsComment(int bbsseq) {
+		return dao.freeBbsComment(bbsseq);
 	}
 	
 	public boolean writeBbs(BbsDto dto) {
