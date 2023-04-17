@@ -8,8 +8,15 @@
 	resultType="com.mul.HealthyGYM.Dto.MemberDto">
 	select *
 	from member
-	where member_seq=#{memberSeq}
+	where memberseq=#{memberseq}
 </select>
+
+	<select id="findMemberinfoById" parameterType="Integer"
+			resultType="com.mul.HealthyGYM.Dto.MemberinfoDto">
+		select *
+		from memberinfo
+		where memberseq=#{memberseq}
+	</select>
 
 </mapper>
 

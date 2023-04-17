@@ -1,21 +1,21 @@
 package com.mul.HealthyGYM.Dto;
 
 public class MemberDto {
-    private int memberSeq;
+    private int memberseq;
     private String email;
     private String pwd;
     private int auth;
     private String profile;
-    private int mailAuth;
-    private String mailKey;
+    private int mailauth;
+    private String mailkey;
     private String nickname;
 
-    public int getMemberSeq() {
-        return memberSeq;
+    public int getMemberseq() {
+        return memberseq;
     }
 
-    public void setMemberSeq(int memberSeq) {
-        this.memberSeq = memberSeq;
+    public void setMemberseq(int memberseq) {
+        this.memberseq = memberseq;
     }
 
     public String getEmail() {
@@ -50,20 +50,20 @@ public class MemberDto {
         this.profile = profile;
     }
 
-    public int getMailAuth() {
-        return mailAuth;
+    public int getMailauth() {
+        return mailauth;
     }
 
-    public void setMailAuth(int mailAuth) {
-        this.mailAuth = mailAuth;
+    public void setMailauth(int mailauth) {
+        this.mailauth = mailauth;
     }
 
-    public String getMailKey() {
-        return mailKey;
+    public String getMailkey() {
+        return mailkey;
     }
 
-    public void setMailKey(String mailKey) {
-        this.mailKey = mailKey;
+    public void setMailkey(String mailkey) {
+        this.mailkey = mailkey;
     }
 
     public String getNickname() {

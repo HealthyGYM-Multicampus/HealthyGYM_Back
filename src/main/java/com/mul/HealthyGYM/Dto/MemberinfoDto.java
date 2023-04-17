@@ -1,18 +1,27 @@
 package com.mul.HealthyGYM.Dto;
 
 public class MemberinfoDto {
-    private String memberSeq;
+    private String memberseq;
+    private String name;
     private String age;
     private int gender;
     private String phone;
     private String mbti;
 
-    public String getMemberSeq() {
-        return memberSeq;
+    public String getMemberseq() {
+        return memberseq;
     }
 
-    public void setMemberSeq(String memberSeq) {
-        this.memberSeq = memberSeq;
+    public void setMemberseq(String memberseq) {
+        this.memberseq = memberseq;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAge() {
