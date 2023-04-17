@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 public class BbsDto implements Serializable {
 	
-	private int member_seq;
+	private int bbsseq;
+	private int memberseq;
 	private String title;
 	private String content;
-	private int bbs_tag;
+	private int bbstag;
 	private String wdate;
 	private String rdate;
 	
@@ -21,20 +22,22 @@ public class BbsDto implements Serializable {
 	
 	public BbsDto() {}
 
-	public BbsDto(int member_seq, String title, String content, int bbs_tag) {
-		this.member_seq = member_seq;
+	public BbsDto(int memberseq, String title, String content, int bbstag) {
+		super();
+		this.memberseq = memberseq;
 		this.title = title;
 		this.content = content;
-		this.bbs_tag = bbs_tag;
+		this.bbstag = bbstag;
 	}
 
-	public BbsDto(int member_seq, String title, String content, int bbs_tag, String wdate, String rdate, int likecount,
-			int readcount, int ref, int del, String thumnail, int report) {
+	public BbsDto(int bbsseq, int memberseq, String title, String content, int bbstag, String wdate, String rdate,
+			int likecount, int readcount, int ref, int del, String thumnail, int report) {
 		super();
-		this.member_seq = member_seq;
+		this.bbsseq = bbsseq;
+		this.memberseq = memberseq;
 		this.title = title;
 		this.content = content;
-		this.bbs_tag = bbs_tag;
+		this.bbstag = bbstag;
 		this.wdate = wdate;
 		this.rdate = rdate;
 		this.likecount = likecount;
@@ -45,12 +48,20 @@ public class BbsDto implements Serializable {
 		this.report = report;
 	}
 
-	public int getMember_seq() {
-		return member_seq;
+	public int getBbsseq() {
+		return bbsseq;
 	}
 
-	public void setMember_seq(int member_seq) {
-		this.member_seq = member_seq;
+	public void setBbsseq(int bbsseq) {
+		this.bbsseq = bbsseq;
+	}
+
+	public int getMemberseq() {
+		return memberseq;
+	}
+
+	public void setMemberseq(int memberseq) {
+		this.memberseq = memberseq;
 	}
 
 	public String getTitle() {
@@ -69,12 +80,12 @@ public class BbsDto implements Serializable {
 		this.content = content;
 	}
 
-	public int getBbs_tag() {
-		return bbs_tag;
+	public int getBbstag() {
+		return bbstag;
 	}
 
-	public void setBbs_tag(int bbs_tag) {
-		this.bbs_tag = bbs_tag;
+	public void setBbstag(int bbstag) {
+		this.bbstag = bbstag;
 	}
 
 	public String getWdate() {
@@ -143,9 +154,10 @@ public class BbsDto implements Serializable {
 
 	@Override
 	public String toString() {
-		return "BbsDto [member_seq=" + member_seq + ", title=" + title + ", content=" + content + ", bbs_tag=" + bbs_tag
-				+ ", wdate=" + wdate + ", rdate=" + rdate + ", likecount=" + likecount + ", readcount=" + readcount
-				+ ", ref=" + ref + ", del=" + del + ", thumnail=" + thumnail + ", report=" + report + "]";
+		return "BbsDto [bbsseq=" + bbsseq + ", memberseq=" + memberseq + ", title=" + title + ", content=" + content
+				+ ", bbstag=" + bbstag + ", wdate=" + wdate + ", rdate=" + rdate + ", likecount=" + likecount
+				+ ", readcount=" + readcount + ", ref=" + ref + ", del=" + del + ", thumnail=" + thumnail + ", report="
+				+ report + "]";
 	}
-	
+
 }
