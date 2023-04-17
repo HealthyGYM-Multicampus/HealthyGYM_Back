@@ -42,7 +42,8 @@ public class MpController {
     @PostMapping(value = "/members/profileupdate")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public String ProfileUpdate(@RequestBody ProfileDto profileDto){
-        System.out.println("profileDto : "+profileDto.toString());
+        System.out.println("수정 완료 : "+profileDto);
+        service.profileUpdate(profileDto);
         return "ok";
     }
 }
