@@ -4,9 +4,12 @@ public class MemberinfoDto {
     private String memberseq;
     private String name;
     private String age;
-    private int gender;
+    private String gender;
     private String phone;
     private String mbti;
+
+    public MemberinfoDto() {
+    }
 
     public String getMemberseq() {
         return memberseq;
@@ -32,11 +35,11 @@ public class MemberinfoDto {
         this.age = age;
     }
 
-    public int getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 

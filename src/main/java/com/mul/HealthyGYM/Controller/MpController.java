@@ -2,11 +2,11 @@ package com.mul.HealthyGYM.Controller;
 
 import com.mul.HealthyGYM.Dto.MemberDto;
 import com.mul.HealthyGYM.Dto.MemberinfoDto;
+import com.mul.HealthyGYM.Dto.ProfileDto;
 import com.mul.HealthyGYM.Service.MpService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MpController {
@@ -37,5 +37,12 @@ public class MpController {
         int memberseq = (int) session.getAttribute("memberseq");
         MemberinfoDto memberinfoDto = service.findMemberinfoById(memberseq);
         return memberinfoDto;
+    }
+
+    @PostMapping(value = "/members/profileupdate")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public String ProfileUpdate(@RequestBody ProfileDto profileDto){
+        System.out.println("profileDto : "+profileDto.toString());
+        return "ok";
     }
 }

@@ -10,6 +10,9 @@ public class MemberDto {
     private String mailkey;
     private String nickname;
 
+    public MemberDto() {
+    }
+
     public int getMemberseq() {
         return memberseq;
     }
