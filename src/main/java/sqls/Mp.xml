@@ -26,6 +26,13 @@
 		WHERE m.memberseq = #{memberseq}
 	</update>
 
+	<select id="followingMembers" parameterType="Integer"
+			resultType="com.mul.HealthyGYM.Dto.FollowDto">
+		select *
+		from follow
+		where memberseq = #{memberseq}
+	</select>
+
 </mapper>
 
 
