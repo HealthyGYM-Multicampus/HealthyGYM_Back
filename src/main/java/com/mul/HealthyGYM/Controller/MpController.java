@@ -72,4 +72,23 @@ public class MpController {
         map.put("followNum", followNum);
         return map;
     }
+
+    @GetMapping(value = "/members/follower")
+    public Map<String, Object> followerMembers(HttpSession session){
+
+        // <-- 임시 세팅
+        session.setAttribute("memberseq", temp);
+        // 임시 세팅 -->
+
+        int memberseq = (int) session.getAttribute("memberseq");
+
+        List<FollowDto> followDtoList = service.followerembers(memberseq);
+        int followerNum = followDtoList.size();
+        System.out.println(followDtoList.toString());
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("followDtoList", followDtoList);
+        map.put("followerNum", followerNum);
+        return map;
+    }
 }

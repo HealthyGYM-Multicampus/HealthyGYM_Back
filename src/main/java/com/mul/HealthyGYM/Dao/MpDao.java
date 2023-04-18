@@ -19,4 +19,7 @@ public interface MpDao {
     void profileUpdate(ProfileDto profileDto);
 
     List<FollowDto> followingMembers(int memberseq);
+
+    List<FollowDto> followerMembers(String nickname);
+
 }

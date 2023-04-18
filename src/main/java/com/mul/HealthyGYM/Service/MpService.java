@@ -37,4 +37,14 @@ public class MpService {
         List<FollowDto> followDtoList = dao.followingMembers(memberseq);
         return followDtoList;
     }
+
+    public List<FollowDto> followerembers(int memberseq) {
+
+        //nickname으로 조회
+        String nickname = dao.findMemberById(memberseq).getNickname();
+        System.out.println(nickname);
+
+        List<FollowDto> followDtoList = dao.followerMembers(nickname);
+        return followDtoList;
+    }
 }
