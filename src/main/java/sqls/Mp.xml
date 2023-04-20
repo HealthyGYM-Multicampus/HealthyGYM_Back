@@ -26,6 +26,12 @@
 		WHERE m.memberseq = #{memberseq}
 	</update>
 
+	<update id="pwdUpdate" parameterType="com.mul.HealthyGYM.Dto.MemberDto">
+		UPDATE member
+			SET pwd = #{pwd}
+		WHERE memberseq = #{memberseq}
+	</update>
+
 	<select id="followingMembers" parameterType="Integer"
 			resultType="com.mul.HealthyGYM.Dto.FollowDto">
 		select *

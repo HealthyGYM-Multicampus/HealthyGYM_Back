@@ -7,6 +7,11 @@ public class FollowDto {
     public FollowDto() {
     }
 
+    public FollowDto(int memberseq, String foltarget) {
+        this.memberseq = memberseq;
+        this.foltarget = foltarget;
+    }
+
     public int getMemberseq() {
         return memberseq;
     }

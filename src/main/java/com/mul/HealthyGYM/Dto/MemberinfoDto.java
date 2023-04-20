@@ -11,6 +11,15 @@ public class MemberinfoDto {
     public MemberinfoDto() {
     }
 
+    public MemberinfoDto(String memberseq, String name, String age, String gender, String phone, String mbti) {
+        this.memberseq = memberseq;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.phone = phone;
+        this.mbti = mbti;
+    }
+
     public String getMemberseq() {
         return memberseq;
     }

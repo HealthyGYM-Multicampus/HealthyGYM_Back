@@ -1,5 +1,7 @@
 package com.mul.HealthyGYM.Dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class ProfileDto {
     private int memberseq;
     private String email;
@@ -11,7 +13,22 @@ public class ProfileDto {
     private String mbti;
     private String profile;
 
+    private MultipartFile image;
+
     public ProfileDto() {
+    }
+
+    public ProfileDto(int memberseq, String email, String nickname, String gender, String name, int age, String phone, String mbti, String profile, MultipartFile image) {
+        this.memberseq = memberseq;
+        this.email = email;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.name = name;
+        this.age = age;
+        this.phone = phone;
+        this.mbti = mbti;
+        this.profile = profile;
+        this.image = image;
     }
 
     public int getMemberseq() {
@@ -99,5 +116,13 @@ public class ProfileDto {
                 ", mbti='" + mbti + '\'' +
                 ", profile='" + profile + '\'' +
                 '}';
+    }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 }

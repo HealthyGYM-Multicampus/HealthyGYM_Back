@@ -13,6 +13,17 @@ public class MemberDto {
     public MemberDto() {
     }
 
+    public MemberDto(int memberseq, String email, String pwd, int auth, String profile, int mailauth, String mailkey, String nickname) {
+        this.memberseq = memberseq;
+        this.email = email;
+        this.pwd = pwd;
+        this.auth = auth;
+        this.profile = profile;
+        this.mailauth = mailauth;
+        this.mailkey = mailkey;
+        this.nickname = nickname;
+    }
+
     public int getMemberseq() {
         return memberseq;
     }

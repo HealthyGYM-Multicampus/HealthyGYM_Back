@@ -22,4 +22,6 @@ public interface MpDao {
 
     List<FollowDto> followerMembers(String nickname);
 
+    void pwdUpdate(MemberDto dto);
+
 }
