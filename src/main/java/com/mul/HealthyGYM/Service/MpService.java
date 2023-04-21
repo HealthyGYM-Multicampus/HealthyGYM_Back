@@ -40,8 +40,8 @@ public class MpService {
             MultipartFile imageFile = profileDto.getImage();
             String storedFileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
 
-            String savePath = "C:/" + storedFileName; //window OS
-            //String savePath = "/Users/admin/springboot_img/" + storedFileName;  //mac OS
+            //String savePath = "C:/upload/" + storedFileName; //window OS
+            String savePath = "/Users/admin/springboot_img/" + storedFileName;  //mac OS
             imageFile.transferTo(new File(savePath));
 
             profileDto.setProfile(storedFileName);

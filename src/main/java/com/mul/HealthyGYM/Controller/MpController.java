@@ -133,8 +133,8 @@ public class MpController {
 
     @GetMapping(value = "/images/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<FileSystemResource> getImage(@PathVariable String imageName) {
-        String imagePath = "C:/" + imageName;   //window OS
-        //String imagePath = "/Users/admin/springboot_img/" + imageName;    //mac OS
+        //String imagePath = "C:/upload/" + imageName;   //window OS
+        String imagePath = "/Users/admin/springboot_img/" + imageName;    //mac OS
         File imageFile = new File(imagePath);
         return ResponseEntity.ok()
                 .contentLength(imageFile.length())
