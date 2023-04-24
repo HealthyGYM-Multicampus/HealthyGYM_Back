@@ -1,9 +1,6 @@
 package com.mul.HealthyGYM.Dao;
 
-import com.mul.HealthyGYM.Dto.FollowDto;
-import com.mul.HealthyGYM.Dto.MemberDto;
-import com.mul.HealthyGYM.Dto.MemberinfoDto;
-import com.mul.HealthyGYM.Dto.ProfileDto;
+import com.mul.HealthyGYM.Dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -20,8 +17,12 @@ public interface MpDao {
 
     List<FollowDto> followingMembers(int memberseq);
 
-    List<FollowDto> followerMembers(String nickname);
+    List<FollowDto> followerMembers(int memberseq);
 
     void pwdUpdate(MemberDto dto);
+
+    void inbodySave(InbodyDto dto);
+
+    List<InbodyDto> inbodyList(int memberseq);
 
 }

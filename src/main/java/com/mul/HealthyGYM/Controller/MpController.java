@@ -1,32 +1,40 @@
 package com.mul.HealthyGYM.Controller;
 
-import com.mul.HealthyGYM.Dto.FollowDto;
-import com.mul.HealthyGYM.Dto.MemberDto;
-import com.mul.HealthyGYM.Dto.MemberinfoDto;
-import com.mul.HealthyGYM.Dto.ProfileDto;
+import com.mul.HealthyGYM.Dto.*;
 import com.mul.HealthyGYM.Service.MpService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class MpController {
 
     public static int temp = 1;
 
+    /*Window Os*/
+    //public static String localPath =  "C:/upload/"
+
+    /*Mac Os*/
+    public static String localPath = "/Users/admin/springboot_img/";
+
     @Autowired
     MpService service;
 
-    // 세션에 저장된 memberseq값으로 member 정보 가져오기
     @GetMapping(value = "/members/findmember")
     public MemberDto findMember(HttpSession session) {
 
@@ -54,24 +62,22 @@ public class MpController {
     @PostMapping(value = "/members/profileupdate")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public String profileUpdate(@ModelAttribute ProfileDto profileDto) throws IOException {
-        System.out.println("진입");
+        System.out.println("profileUpdate 메서드 실행");
         service.profileUpdate(profileDto);
-        System.out.println("통과");
         return "ok";
     }
 
+    // Multipart file이 null일 경우 프로필이미지를 제외한 나머지 회원정보 업데이트
     @PostMapping(value = "/members/profileupdatenull")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public String profileUpdateNull(@RequestBody ProfileDto profileDto) throws IOException {
-        System.out.println("null진입");
+        System.out.println("profileUpdateNull 메서드 실행");
         service.profileUpdate(profileDto);
-        System.out.println("null통과");
         return "ok";
     }
 
-
     @GetMapping(value = "/members/follow")
-    public Map<String, Object> followingMembers(HttpSession session){
+    public Map<String, Object> followingMembers(HttpSession session) {
 
         // <-- 임시 세팅
         session.setAttribute("memberseq", temp);
@@ -81,7 +87,6 @@ public class MpController {
 
         List<FollowDto> followDtoList = service.followingMembers(memberseq);
         int followNum = followDtoList.size();
-        System.out.println(followDtoList.toString());
 
         Map<String, Object> map = new HashMap<>();
         map.put("followDtoList", followDtoList);
@@ -90,7 +95,7 @@ public class MpController {
     }
 
     @GetMapping(value = "/members/follower")
-    public Map<String, Object> followerMembers(HttpSession session){
+    public Map<String, Object> followerMembers(HttpSession session) {
 
         // <-- 임시 세팅
         session.setAttribute("memberseq", temp);
@@ -100,7 +105,6 @@ public class MpController {
 
         List<FollowDto> followDtoList = service.followerembers(memberseq);
         int followerNum = followDtoList.size();
-        System.out.println(followDtoList.toString());
 
         Map<String, Object> map = new HashMap<>();
         map.put("followDtoList", followDtoList);
@@ -118,26 +122,95 @@ public class MpController {
         session.setAttribute("memberseq", temp);
         // 임시 세팅 -->
 
-        int memberseq = (int)session.getAttribute("memberseq");
+        int memberseq = (int) session.getAttribute("memberseq");
         String pwd = memberDto.getPwd();
 
-        System.out.println("memberseq:"+memberseq);
-        System.out.println("pwd:"+pwd);
         dto.setMemberseq(memberseq);
         dto.setPwd(pwd);
-        System.out.println("dto: "+dto.getPwd() + dto.getMemberseq());
+
         service.pwdUpdate(dto);
-        System.out.println("pwdUpdate통과");
         return "ok";
     }
 
-    @GetMapping(value = "/images/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<FileSystemResource> getImage(@PathVariable String imageName) {
-        //String imagePath = "C:/upload/" + imageName;   //window OS
-        String imagePath = "/Users/admin/springboot_img/" + imageName;    //mac OS
+    @GetMapping(value = "/images/{folderName}/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<FileSystemResource> getImage(@PathVariable String folderName, @PathVariable String imageName) {
+
+        String imagePath = localPath + folderName + "/" + imageName; //mac OS
+
         File imageFile = new File(imagePath);
         return ResponseEntity.ok()
                 .contentLength(imageFile.length())
                 .body(new FileSystemResource(imageFile));
+    }
+
+    @PostMapping(value = "/ocr_fileUpload")
+    public String ocr_fileUpload(@RequestParam("uploadFile") MultipartFile uploadFile,
+                                 HttpServletRequest req, HttpSession session) {
+        System.out.println("NaverCloudController obj_detection " + new Date());
+
+        // 임시
+        session.setAttribute("memberseq", temp);
+        // 임시
+
+        int memberseq = (int) session.getAttribute("memberseq");
+
+        String originalFileName = uploadFile.getOriginalFilename();    //오리지날 파일명
+        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));    //파일 확장자
+
+        // UUID 사용하여 파일명 중복 문제 처리
+        String filename = UUID.randomUUID() + extension;
+        String filepath = localPath + "inbody/" + filename;
+
+
+        System.out.println("업로드 경로 : " + filepath);
+
+        try {
+            // 업로드된 파일을 임시 파일로 저장
+            BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+            os.write(uploadFile.getBytes());
+            os.close();
+
+            // 이미지 크기를 변경하여 저장
+            BufferedImage originalImage = ImageIO.read(new File(filepath));
+            int width = originalImage.getWidth();
+            int height = originalImage.getHeight();
+            double aspectRatio = (double) width / height;
+            int newWidth = 1000;
+            int newHeight = (int) (newWidth / aspectRatio);
+            BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, originalImage.getType());
+            Graphics2D g = resizedImage.createGraphics();
+            g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+            g.dispose();
+            ImageIO.write(resizedImage, "png", new File(filepath)); // 이미지 파일 확장자명에 상관없이 png 파일로 저장
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+
+        String result = service.ocr(filepath, memberseq, filename);
+
+        return result;
+    }
+
+    @GetMapping(value = "/inbodylist")
+    public Map<String, Object> inbodyList(HttpSession session) {
+        System.out.println("inbodyList 진입");
+
+        // 임시
+        session.setAttribute("memberseq", temp);
+        // 임시
+
+        int memberseq = (int) session.getAttribute("memberseq");
+
+        List<InbodyDto> list = service.inbodyList(memberseq);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", list);
+
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println("inbodylist : " + list.get(i).toString());
+        }
+        return map;
     }
 }
