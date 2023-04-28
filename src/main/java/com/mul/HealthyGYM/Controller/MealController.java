@@ -1,12 +1,18 @@
 package com.mul.HealthyGYM.Controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -15,8 +21,15 @@ import java.net.URLEncoder;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mul.HealthyGYM.Dto.BbsCommentDto;
+import com.mul.HealthyGYM.Dto.BbsDto;
+import com.mul.HealthyGYM.Dto.BbsFoodDto;
 import com.mul.HealthyGYM.Dto.FoodDto;
+import com.mul.HealthyGYM.Dto.MealCommentMemberDto;
 import com.mul.HealthyGYM.Service.MealService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -37,16 +50,16 @@ public class MealController {
 		
 		
 		
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1471000/FoodNtrIrdntInfoService1/getFoodNtrItdntList1"); /*URL*/
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=aod5N32JX4OSOPRMyQPTw8VUZxR9zvbrkDLsrM%2BdNRtHP%2BuVlr31Np4fWwVVYm131hApK%2FB4auwWMKzrMmqMhg%3D%3D"); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("desc_kor","UTF-8") + "=" + URLEncoder.encode(search, "UTF-8")); /*식품이름*/
-        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1471000/FoodNtrIrdntInfoService1/getFoodNtrItdntList1"); //URL
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=aod5N32JX4OSOPRMyQPTw8VUZxR9zvbrkDLsrM%2BdNRtHP%2BuVlr31Np4fWwVVYm131hApK%2FB4auwWMKzrMmqMhg%3D%3D"); //Service Key
+        urlBuilder.append("&" + URLEncoder.encode("desc_kor","UTF-8") + "=" + URLEncoder.encode(search, "UTF-8")); //식품이름
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); //페이지번호
         // 당장은 100개까지만 보이도록 했습니다. 100개가 넘어가는 경우결과 창에서 페이지 total count를 가공하여 페이징 해주면 될거같습니다.
         
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); /*한 페이지 결과 수*/
-        urlBuilder.append("&" + URLEncoder.encode("bgn_year","UTF-8") + "=" + URLEncoder.encode("", "UTF-8")); /*구축년도*/
-        urlBuilder.append("&" + URLEncoder.encode("animal_plant","UTF-8") + "=" + URLEncoder.encode("", "UTF-8")); /*가공업체*/
-        urlBuilder.append("&" + URLEncoder.encode("type","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); /*응답데이터 형식(xml/json) Default: xml*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); //한 페이지 결과 수
+        urlBuilder.append("&" + URLEncoder.encode("bgn_year","UTF-8") + "=" + URLEncoder.encode("", "UTF-8")); //구축년도
+        urlBuilder.append("&" + URLEncoder.encode("animal_plant","UTF-8") + "=" + URLEncoder.encode("", "UTF-8")); //가공업체
+        urlBuilder.append("&" + URLEncoder.encode("type","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); //응답데이터 형식(xml/json) Default: xml
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -79,19 +92,19 @@ public class MealController {
         for(int i=0; i<items.length(); i++) {
             JSONObject item = items.getJSONObject(i);
             FoodDto dto = new FoodDto();
-            dto.setDESC_KOR(item.getString("DESC_KOR"));
-            dto.setSERVING_WT(item.getString("SERVING_WT"));
-            dto.setNUTR_CONT1(item.getString("NUTR_CONT1"));
-            dto.setNUTR_CONT2(item.getString("NUTR_CONT2"));
-            dto.setNUTR_CONT3(item.getString("NUTR_CONT3"));
-            dto.setNUTR_CONT4(item.getString("NUTR_CONT4"));
-            dto.setNUTR_CONT5(item.getString("NUTR_CONT5"));
-            dto.setNUTR_CONT6(item.getString("NUTR_CONT6"));
-            dto.setNUTR_CONT7(item.getString("NUTR_CONT7"));
-            dto.setNUTR_CONT8(item.getString("NUTR_CONT8"));
-            dto.setNUTR_CONT9(item.getString("NUTR_CONT9"));
-            dto.setBGN_YEAR(item.getString("BGN_YEAR"));
-            dto.setANIMAL_PLANT(item.getString("ANIMAL_PLANT"));
+            dto.setDesckor(item.getString("DESC_KOR"));
+            dto.setServingwt(item.getString("SERVING_WT"));
+            dto.setNutrcont1(item.getString("NUTR_CONT1"));
+            dto.setNutrcont2(item.getString("NUTR_CONT2"));
+            dto.setNutrcont3(item.getString("NUTR_CONT3"));
+            dto.setNutrcont4(item.getString("NUTR_CONT4"));
+            dto.setNutrcont5(item.getString("NUTR_CONT5"));
+            dto.setNutrcont6(item.getString("NUTR_CONT6"));
+            dto.setNutrcont7(item.getString("NUTR_CONT7"));
+            dto.setNutrcont8(item.getString("NUTR_CONT8"));
+            dto.setNutrcont9(item.getString("NUTR_CONT9"));
+            dto.setBgnyear(item.getString("BGN_YEAR"));
+            dto.setAnimalplant(item.getString("ANIMAL_PLANT"));
             FoodDtoList.add(dto); // 리스트에 Dto 추가
         }
         
@@ -102,4 +115,148 @@ public class MealController {
         return FoodDtoList;
 	}
 	
+	@PostMapping(value = "/writemeal1")
+	public String writemeal1(BbsDto bbsdto) {
+		System.out.println("writemeal1 " + new Date());
+		// System.out.println(bbsdto.toString());
+		
+		
+		if(mealservice.writemeal1(bbsdto)) {
+			return "OK";
+		} else {
+			return "FALSE";
+		}
+		
+		
+		
+	}
+	
+	@PostMapping(value = "/writemeal2", consumes = "application/json")
+	public String writemeal2(@RequestBody String selectedItemsJson) throws IOException {
+		
+		
+		System.out.println("writemeal2 " + new Date());
+		
+		// 다시 json 파싱 하는 방법을 택했어요............... null로 받아오는거나 배열 통신오류를 멈출 수 없습니다.
+		ObjectMapper objectMapper = new ObjectMapper();
+        List<FoodDto> foodDtoList = objectMapper.readValue(selectedItemsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, FoodDto.class));
+        
+        /*
+        for(FoodDto food : foodDtoList) {
+            System.out.println("desckor: " + food.getDesckor());
+            System.out.println("servingwt: " + food.getServingwt());
+            System.out.println("nutrcont1: " + food.getNutrcont1());
+            System.out.println("nutrcont2: " + food.getNutrcont2());
+            System.out.println("nutrcont3: " + food.getNutrcont3());
+            System.out.println("nutrcont4: " + food.getNutrcont4());
+            System.out.println("nutrcont5: " + food.getNutrcont5());
+            System.out.println("nutrcont6: " + food.getNutrcont6());
+            System.out.println("nutrcont7: " + food.getNutrcont7());
+            System.out.println("nutrcont8: " + food.getNutrcont8());
+            System.out.println("nutrcont9: " + food.getNutrcont9());
+            System.out.println("bgnyear: " + food.getBgnyear());
+            System.out.println("animalplant: " + food.getAnimalplant());
+            System.out.println("------------------------------");
+        }
+        */
+        
+        if(mealservice.writemeal2(foodDtoList)) {
+        	return "OK";
+        } else {
+        	return "FALSE";
+        }
+	}
+	
+	@GetMapping("/posts")
+	public List<BbsFoodDto> getPosts(@RequestParam int page, @RequestParam int limit, @RequestParam int memberseq, @RequestParam String search, @RequestParam String select){
+		
+		// System.out.println("page : " + page + " limit : " + limit);
+		// List<BbsDto>
+		
+		//	System.out.println(search);
+		//	System.out.println(select);
+		
+		
+		
+		return mealservice.getPosts(page, limit, memberseq, search, select);
+		
+	}
+	
+	@PostMapping("/likemealpost")
+	public String likemealpost(int bbsseq, int memberseq) {
+	
+		if(mealservice.likemealpost(bbsseq, memberseq)) {
+			return "Success";
+		}
+		else {
+			return "Fail";
+		}
+		
+		
+	}
+	
+	//updatemeal post 추가 해야..
+	
+	
+	@PostMapping("/deletemealpost")
+	public String deletemealpost(int bbsseq) {
+		
+		if(mealservice.deletemealpost(bbsseq)) {
+			return "Success";
+		}
+		else {
+			return "Fail";
+		}
+	}
+	
+	
+	
+	// 댓글 작성
+	@PostMapping("/wrtiemealcomment")
+	public String wrtiemealcomment(@RequestBody Map<String, Object> requestBody) {
+	    int bbsseq = (Integer) requestBody.get("bbsseq");
+	    int memberseq = (Integer) requestBody.get("memberseq");
+	    String commentcontent = (String) requestBody.get("commentcontent");
+	    
+	    // System.out.println("bbsseq: " + bbsseq + " memberseq: " + memberseq + " comtcnt: " + commentcontent);
+	    
+	    if (mealservice.wrtiemealcomment(bbsseq, memberseq, commentcontent)) {
+	        return "Success";
+	    } else {
+	        return "Fail";
+	    }
+	}
+	
+	// 대댓글 작성
+	@PostMapping("/wrtiemealcomment2")
+	public String wrtiemealcomment2(@RequestBody Map<String, Object> requestBody) {
+	    int bbsseq = (Integer) requestBody.get("bbsseq");
+	    int memberseq = (Integer) requestBody.get("memberseq");
+	    String commentcontent = (String) requestBody.get("commentcontent");
+	    int ref = (Integer) requestBody.get("ref");
+	    
+	    System.out.println("bbsseq: " + bbsseq + " memberseq: " + memberseq + " comtcnt: " + commentcontent + " ref: " + ref);
+	    
+	    if (mealservice.wrtiemealcomment2(bbsseq, memberseq, commentcontent, ref)) {
+	        return "Success";
+	    } else {
+	        return "Fail";
+	    }
+	}
+	
+	
+	@GetMapping("/getmealcomments")
+	public List<MealCommentMemberDto> getmealcomments(int bbsseq, int memberseq) {
+		// 현재 BbsCommentDto를 반환중. 이미지와 같이 반환하도록 나중에 수정해야함.
+		
+		return mealservice.getmealcomments(bbsseq, memberseq);
+	}
+	
+	
+	
+
+	
+	
 }
+
+
