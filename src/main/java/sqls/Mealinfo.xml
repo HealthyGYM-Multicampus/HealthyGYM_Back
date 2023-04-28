@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.mul.HealthyGYM.Dao.MealDao">
+
+
+	<insert id="insertMeal" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
+		insert into bbs (memberseq, title, content, bbstag)
+		values(#{memberseq}, #{title}, #{content}, #{bbstag})
+	</insert>
+	
+	<select id="getLastInsertId" resultType="Integer">
+		select last_insert_id();
+	</select>
+	
+	<insert id="writemeal2" parameterType="com.mul.HealthyGYM.Dto.FoodDto">
+		insert into meal_ingredients (bbsseq, DESCKOR, SERVINGWT, NUTRCONT1, NUTRCONT2, 
+			NUTRCONT3, NUTRCONT4, NUTRCONT5, NUTRCONT6, NUTRCONT7, NUTRCONT8, NUTRCONT9, 
+			BGNYEAR, ANIMALPLANT)
+		values (#{bbsseq}, #{desckor}, #{servingwt}, #{nutrcont1}, #{nutrcont2}, #{nutrcont3}, #{nutrcont4}, #{nutrcont5}, #{nutrcont6}, #{nutrcont7}, #{nutrcont8}, #{nutrcont9}, #{bgnyear}, #{animalplant})
+	</insert>
+	
+<select id="selectBbsList" parameterType="java.util.HashMap" resultType="com.mul.HealthyGYM.Dto.BbsDto">
+  <choose>
+    <when test="select == 'all'">
+      SELECT bbsseq, title, content, wdate, likecount, readcount, del, bbstag,
+        b.memberseq, b.nickname
+      FROM bbs a, member b
+      WHERE a.memberseq = b.memberseq
+      ORDER BY bbsseq DESC LIMIT #{offset}, #{limit}
+    </when>
+    <when test="select == 'follow'">
+      SELECT bbsseq, title, content, wdate, likecount, readcount, del, bbstag,
+        b.memberseq, b.nickname
+      FROM bbs a, member b, follow c
+      WHERE a.memberseq = b.memberseq
+        AND b.memberseq = c.memberseq
+        AND c.memberseq = #{memberseq}
+      ORDER BY bbsseq DESC LIMIT #{offset}, #{limit}
+    </when>
+        <when test="select == 'title'">
+      SELECT bbsseq, title, content, wdate, likecount, readcount, del, bbstag,
+        b.memberseq, b.nickname
+      FROM bbs a, member b
+      WHERE a.memberseq = b.memberseq
+        AND a.title LIKE CONCAT('%', #{search}, '%')
+      ORDER BY bbsseq DESC LIMIT #{offset}, #{limit}
+    </when>
+    <when test="select == 'author'">
+      SELECT bbsseq, title, content, wdate, likecount, readcount, del, bbstag,
+        b.memberseq, b.nickname
+      FROM bbs a, member b
+      WHERE a.memberseq = b.memberseq
+        AND b.nickname = #{search}
+      ORDER BY bbsseq DESC LIMIT #{offset}, #{limit}
+    </when>
+    <when test="select == 'content'">
+      SELECT bbsseq, title, content, wdate, likecount, readcount, del, bbstag,
+        b.memberseq, b.nickname
+      FROM bbs a, member b
+      WHERE a.memberseq = b.memberseq
+        AND a.content LIKE CONCAT('%', #{search}, '%')
+      ORDER BY bbsseq DESC LIMIT #{offset}, #{limit}
+    </when>
+  </choose>
+</select>
+
+		
+	<select id="selectFoodList" parameterType="java.util.HashMap" resultType="com.mul.HealthyGYM.Dto.FoodDto">
+	    SELECT * 
+	    FROM meal_ingredients
+	    WHERE bbsseq = #{bbsseq}
+	</select>
+
+	<delete id="deletemealpost" parameterType="Integer">
+		delete from bbs
+		where bbsseq = #{bbsseq}
+		
+	</delete>
+
+	<!-- cascade로 설정해놔서 관련 테이블 상관 없음. -->
+
+	<!-- 다른 기능이지만 앞으로도 세분화 하지 않겠습니다. 
+		 프로젝트 규모가 커진것도있고, 
+		 중복되는 코드도 다른방식으로 주고받아야할거같습니다. -->
+	<!-- 게시물에 dto로 함께 보내 초기 렌더링하기 위한 용도 -->
+	
+	
+	<select id="islikeFoodBbs" parameterType="java.util.HashMap" resultType="Integer">
+		select count(*) from like_bbs
+		where memberseq = #{memberseq} and bbsseq = #{bbsseq} 
+	</select>
+
+	<select id="likemealpostsearch" parameterType="com.mul.HealthyGYM.Dto.LikeDto" resultType="java.lang.Integer">	
+		select count(*) from like_bbs
+		where memberseq = #{memberseq} and bbsseq = #{bbsseq} 
+	</select>
+	
+	<insert id="likemealpost" parameterType="com.mul.HealthyGYM.Dto.LikeDto">
+		insert into like_bbs (memberseq, bbsseq)
+		values (#{memberseq}, #{bbsseq})
+	</insert>
+	
+	<update id="likeupmealCount" parameterType="com.mul.HealthyGYM.Dto.LikeDto">
+		update bbs
+		set likecount = likecount + 1
+		where bbsseq = #{bbsseq}
+	</update>
+	
+	<delete id="dislikemealpost" parameterType="com.mul.HealthyGYM.Dto.LikeDto">
+		delete from like_bbs
+		where memberseq = #{memberseq} and bbsseq = #{bbsseq}
+	</delete>
+
+	<update id="likedownmealCount" parameterType="com.mul.HealthyGYM.Dto.LikeDto">
+		update bbs
+		set likecount = likecount - 1
+		where bbsseq = #{bbsseq}
+	</update>
+
+	<select id="getcmtcnt" parameterType="Integer" resultType="Integer">
+		select count(*)
+		from bbs_comment
+		where bbsseq = #{bbsseq}
+	</select>
+	
+	<insert id="wrtiemealcomment" parameterType="java.util.HashMap">
+		insert into bbs_comment(memberseq, bbsseq, cmtcontent, regdate, cmtdel, step, ref)
+		values(#{memberseq},#{bbsseq},#{cmtcontent},now(),0,0,0)
+	</insert>
+	
+		
+	<select id="getmealcomments" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.BbsCommentDto">
+		select *
+		from bbs_comment
+		where bbsseq = #{bbsseq} and cmtdel = 0
+	</select>
+	
+	<select id="getwritorprofile" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.MemberDto">
+		select memberseq, auth, profile, nickname
+		from member
+		where memberseq = #{memberseq}
+	</select>
+	
+	<insert id="writemealcomment2" parameterType="java.util.HashMap">
+		insert into bbs_comment(memberseq, bbsseq, cmtcontent, regdate, cmtdel, step, ref)
+		values(#{memberseq},#{bbsseq},#{cmtcontent},now(),0,0,#{ref})
+	</insert>
+	
+</mapper>
+
+
+
