@@ -1,17 +1,32 @@
 package com.mul.HealthyGYM.Dto;
 
 public class BbsCommentDto {
-	int commentseq;
-	int memberseq;
-	int bbsseq;
-	String cmtcontent;
-	String regdate;
-	int cmtdel;
-	int ref;
-	int step;
 	
-	public BbsCommentDto() {
+	private int commentseq;
+	private int memberseq;
+	private int bbsseq;
+	private String cmtcontent;
+	private String regdate;
+	private int cmtdel;
+	private int ref;
+	private int step;
+	
+	public BbsCommentDto() {}
+	
+	public BbsCommentDto(int memberseq, int bbsseq, String cmtcontent) {
 		super();
+		this.memberseq = memberseq;
+		this.bbsseq = bbsseq;
+		this.cmtcontent = cmtcontent;
+	}
+
+	public BbsCommentDto(int memberseq, int bbsseq, String cmtcontent, int ref, int step) {
+		super();
+		this.memberseq = memberseq;
+		this.bbsseq = bbsseq;
+		this.cmtcontent = cmtcontent;
+		this.ref = ref;
+		this.step = step;
 	}
 
 	public BbsCommentDto(int commentseq, int memberseq, int bbsseq, String cmtcontent, String regdate, int cmtdel,
@@ -95,11 +110,5 @@ public class BbsCommentDto {
 		return "BbsCommentDto [commentseq=" + commentseq + ", memberseq=" + memberseq + ", bbsseq=" + bbsseq
 				+ ", cmtcontent=" + cmtcontent + ", regdate=" + regdate + ", cmtdel=" + cmtdel + ", ref=" + ref + "]";
 	}
-	
-	
-	
-	 
-	
-	
 	
 }

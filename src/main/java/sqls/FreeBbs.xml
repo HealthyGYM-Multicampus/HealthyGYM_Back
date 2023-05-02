@@ -4,33 +4,61 @@
 
 <mapper namespace="com.mul.HealthyGYM.Dao.FreeBbsDao">
 	
-	<select id="freeBbsDetail" parameterType="Integer" resultType="map">
+	<select id="bbsList" parameterType="com.mul.HealthyGYM.Dto.BbsParam" resultType="map">
+		select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail,
+			nickname, ifnull(cnt, 0) cmtcount
+		from member a, (select row_number()over(order by ${order} desc) rnum,
+			memberseq, bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail
+			from bbs
+			where bbstag=#{bbstag} and del=0
+			order by ${order} desc) b
+			LEFT OUTER JOIN (select count(*) cnt, bbsseq
+			from bbs_comment
+			group by bbsseq) c
+		on b.bbsseq=c.bbsseq
+		where a.memberseq=b.memberseq
+			and rnum between ${start} and ${end}
+	</select>
+	
+	<select id="bbsDetail" parameterType="Integer" resultType="map">
 		select bbsseq, title, content, wdate, likecount, readcount, del, bbstag,
-		b.memberseq, b.nickname
+			b.memberseq, b.nickname
 		from bbs a, member b
 		where a.memberseq=b.memberseq
-		and bbsseq=#{bbsseq}
+			and bbsseq=#{bbsseq}
 	</select>
 	
-	<select id="checkLike" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
+	<select id="checkLiking" parameterType="com.mul.HealthyGYM.Dto.BbsDto" resultType="Integer">
 		select EXISTS(select *
-		from like_bbs
-		where memberseq=#{memberseq} and bbsseq=#{bbsseq}) as success
+			from like_bbs
+			where memberseq=#{memberseq} and bbsseq=#{bbsseq}) as liking
 	</select>
 	
-	<select id="freeBbsComment" parameterType="Integer" resultType="map">
-		select commentseq, cmtcontent, regdate, step, ref,
-		b.memberseq, b.nickname, b.profile
+	<select id="bbsComment" parameterType="Integer" resultType="map">
+		select bbsseq, commentseq, cmtcontent, regdate, step, ref, cmtdel,
+			b.memberseq, b.nickname, b.profile
 		from bbs_comment a, member b
 		where a.memberseq=b.memberseq
-		and bbsseq=#{bbsseq}
-		and cmtdel=0
+			and bbsseq=#{bbsseq}
 		order by ref desc, step
 	</select>
 	
 	<insert id="writeBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
-		insert into bbs(memberseq, title, content, bbstag)
-		values(#{memberseq}, #{title}, #{content}, #{bbstag})
+		insert into bbs(memberseq, title, content, bbstag, thumnail)
+		values(#{memberseq}, #{title}, #{content}, #{bbstag}, #{thumnail})
+	</insert>
+	
+	<insert id="writeBbsComment" parameterType="com.mul.HealthyGYM.Dto.BbsCommentDto">
+		insert into bbs_comment(memberseq, bbsseq, cmtcontent, cmtdel, ref, step)
+		values(#{memberseq}, #{bbsseq}, #{cmtcontent}, 0,
+			(select ifnull(max(ref), 0)+1 from bbs_comment a), 0)
+	</insert>
+	
+	<insert id="writeBbsReply" parameterType="com.mul.HealthyGYM.Dto.BbsCommentDto">
+		insert into bbs_comment(memberseq, bbsseq, cmtcontent, cmtdel, ref, step)
+		values(#{memberseq}, #{bbsseq}, #{cmtcontent}, 0,
+			(select ref from bbs_comment a where commentseq=#{commentseq}),
+			(select step from bbs_comment b where commentseq=#{commentseq})+1)
 	</insert>
 	
 	<insert id="likeBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
@@ -38,11 +66,23 @@
 		values(#{memberseq}, #{bbsseq})
 	</insert>
 	
-	<update id="likecount" parameterType="Integer">
+	<update id="likecountUp" parameterType="Integer">
 		update bbs
 		set likecount=likecount+1
 		where bbsseq=#{bbsseq}
 	</update>
+	
+	<update id="likecountDown" parameterType="Integer">
+		update bbs
+		set likecount=likecount-1
+		where bbsseq=#{bbsseq}
+	</update>
+	
+	<delete id="unlikeBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
+		delete from like_bbs
+		where memberseq=#{memberseq}
+			and bbsseq=#{bbsseq}
+	</delete>
 	
 	
 	<insert id="uploadFile" parameterType="String">
