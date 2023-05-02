@@ -1,155 +1,173 @@
 package com.mul.HealthyGYM.Dto;
 
 public class FoodDto {
-	 	private String DESC_KOR;
-	    private String SERVING_WT;
-	    private String NUTR_CONT1;
-	    private String NUTR_CONT2;
-	    private String NUTR_CONT3;
-	    private String NUTR_CONT4;
-	    private String NUTR_CONT5;
-	    private String NUTR_CONT6;
-	    private String NUTR_CONT7;
-	    private String NUTR_CONT8;
-	    private String NUTR_CONT9;
-	    private String BGN_YEAR;
-	    private String ANIMAL_PLANT;
+		private int bbsseq;
+	 	private String desckor;
+	    private String servingwt;
+	    private String nutrcont1;
+	    private String nutrcont2;
+	    private String nutrcont3;
+	    private String nutrcont4;
+	    private String nutrcont5;
+	    private String nutrcont6;
+	    private String nutrcont7;
+	    private String nutrcont8;
+	    private String nutrcont9;
+	    private String bgnyear;
+	    private String animalplant;
 	    
 		public FoodDto() {
 			super();
 		}
 
-		public FoodDto(String dESC_KOR, String sERVING_WT, String nUTR_CONT1, String nUTR_CONT2, String nUTR_CONT3,
-				String nUTR_CONT4, String nUTR_CONT5, String nUTR_CONT6, String nUTR_CONT7, String nUTR_CONT8,
-				String nUTR_CONT9, String bGN_YEAR, String aNIMAL_PLANT) {
+		public FoodDto(String desckor, String servingwt, String nutrcont1, String nutrcont2, String nutrcont3,
+				String nutrcont4, String nutrcont5, String nutrcont6, String nutrcont7, String nutrcont8,
+				String nutrcont9, String bgnyear, String animalplant) {
 			super();
-			DESC_KOR = dESC_KOR;
-			SERVING_WT = sERVING_WT;
-			NUTR_CONT1 = nUTR_CONT1;
-			NUTR_CONT2 = nUTR_CONT2;
-			NUTR_CONT3 = nUTR_CONT3;
-			NUTR_CONT4 = nUTR_CONT4;
-			NUTR_CONT5 = nUTR_CONT5;
-			NUTR_CONT6 = nUTR_CONT6;
-			NUTR_CONT7 = nUTR_CONT7;
-			NUTR_CONT8 = nUTR_CONT8;
-			NUTR_CONT9 = nUTR_CONT9;
-			BGN_YEAR = bGN_YEAR;
-			ANIMAL_PLANT = aNIMAL_PLANT;
+			this.desckor = desckor;
+			this.servingwt = servingwt;
+			this.nutrcont1 = nutrcont1;
+			this.nutrcont2 = nutrcont2;
+			this.nutrcont3 = nutrcont3;
+			this.nutrcont4 = nutrcont4;
+			this.nutrcont5 = nutrcont5;
+			this.nutrcont6 = nutrcont6;
+			this.nutrcont7 = nutrcont7;
+			this.nutrcont8 = nutrcont8;
+			this.nutrcont9 = nutrcont9;
+			this.bgnyear = bgnyear;
+			this.animalplant = animalplant;
 		}
 
-		public String getDESC_KOR() {
-			return DESC_KOR;
+		
+		public int getBbsseq() {
+			return bbsseq;
 		}
 
-		public void setDESC_KOR(String dESC_KOR) {
-			DESC_KOR = dESC_KOR;
+		public void setBbsseq(int bbsseq) {
+			this.bbsseq = bbsseq;
 		}
 
-		public String getSERVING_WT() {
-			return SERVING_WT;
+		public String getDesckor() {
+			return desckor;
 		}
 
-		public void setSERVING_WT(String sERVING_WT) {
-			SERVING_WT = sERVING_WT;
+		public void setDesckor(String desckor) {
+			this.desckor = desckor;
 		}
 
-		public String getNUTR_CONT1() {
-			return NUTR_CONT1;
+		public String getServingwt() {
+			return servingwt;
 		}
 
-		public void setNUTR_CONT1(String nUTR_CONT1) {
-			NUTR_CONT1 = nUTR_CONT1;
+		public void setServingwt(String servingwt) {
+			this.servingwt = servingwt;
 		}
 
-		public String getNUTR_CONT2() {
-			return NUTR_CONT2;
+		public String getNutrcont1() {
+			return nutrcont1;
 		}
 
-		public void setNUTR_CONT2(String nUTR_CONT2) {
-			NUTR_CONT2 = nUTR_CONT2;
+		public void setNutrcont1(String nutrcont1) {
+			this.nutrcont1 = nutrcont1;
 		}
 
-		public String getNUTR_CONT3() {
-			return NUTR_CONT3;
+		public String getNutrcont2() {
+			return nutrcont2;
 		}
 
-		public void setNUTR_CONT3(String nUTR_CONT3) {
-			NUTR_CONT3 = nUTR_CONT3;
+		public void setNutrcont2(String nutrcont2) {
+			this.nutrcont2 = nutrcont2;
 		}
 
-		public String getNUTR_CONT4() {
-			return NUTR_CONT4;
+		public String getNutrcont3() {
+			return nutrcont3;
 		}
 
-		public void setNUTR_CONT4(String nUTR_CONT4) {
-			NUTR_CONT4 = nUTR_CONT4;
+		public void setNutrcont3(String nutrcont3) {
+			this.nutrcont3 = nutrcont3;
 		}
 
-		public String getNUTR_CONT5() {
-			return NUTR_CONT5;
+		public String getNutrcont4() {
+			return nutrcont4;
 		}
 
-		public void setNUTR_CONT5(String nUTR_CONT5) {
-			NUTR_CONT5 = nUTR_CONT5;
+		public void setNutrcont4(String nutrcont4) {
+			this.nutrcont4 = nutrcont4;
 		}
 
-		public String getNUTR_CONT6() {
-			return NUTR_CONT6;
+		public String getNutrcont5() {
+			return nutrcont5;
 		}
 
-		public void setNUTR_CONT6(String nUTR_CONT6) {
-			NUTR_CONT6 = nUTR_CONT6;
+		public void setNutrcont5(String nutrcont5) {
+			this.nutrcont5 = nutrcont5;
 		}
 
-		public String getNUTR_CONT7() {
-			return NUTR_CONT7;
+		public String getNutrcont6() {
+			return nutrcont6;
 		}
 
-		public void setNUTR_CONT7(String nUTR_CONT7) {
-			NUTR_CONT7 = nUTR_CONT7;
+		public void setNutrcont6(String nutrcont6) {
+			this.nutrcont6 = nutrcont6;
 		}
 
-		public String getNUTR_CONT8() {
-			return NUTR_CONT8;
+		public String getNutrcont7() {
+			return nutrcont7;
 		}
 
-		public void setNUTR_CONT8(String nUTR_CONT8) {
-			NUTR_CONT8 = nUTR_CONT8;
+		public void setNutrcont7(String nutrcont7) {
+			this.nutrcont7 = nutrcont7;
 		}
 
-		public String getNUTR_CONT9() {
-			return NUTR_CONT9;
+		public String getNutrcont8() {
+			return nutrcont8;
 		}
 
-		public void setNUTR_CONT9(String nUTR_CONT9) {
-			NUTR_CONT9 = nUTR_CONT9;
+		public void setNutrcont8(String nutrcont8) {
+			this.nutrcont8 = nutrcont8;
 		}
 
-		public String getBGN_YEAR() {
-			return BGN_YEAR;
+		public String getNutrcont9() {
+			return nutrcont9;
 		}
 
-		public void setBGN_YEAR(String bGN_YEAR) {
-			BGN_YEAR = bGN_YEAR;
+		public void setNutrcont9(String nutrcont9) {
+			this.nutrcont9 = nutrcont9;
 		}
 
-		public String getANIMAL_PLANT() {
-			return ANIMAL_PLANT;
+		public String getBgnyear() {
+			return bgnyear;
 		}
 
-		public void setANIMAL_PLANT(String aNIMAL_PLANT) {
-			ANIMAL_PLANT = aNIMAL_PLANT;
+		public void setBgnyear(String bgnyear) {
+			this.bgnyear = bgnyear;
+		}
+
+		public String getAnimalplant() {
+			return animalplant;
+		}
+
+		public void setAnimalplant(String animalplant) {
+			this.animalplant = animalplant;
 		}
 
 		@Override
 		public String toString() {
-			return "FoodDto [DESC_KOR=" + DESC_KOR + ", SERVING_WT=" + SERVING_WT + ", NUTR_CONT1=" + NUTR_CONT1
-					+ ", NUTR_CONT2=" + NUTR_CONT2 + ", NUTR_CONT3=" + NUTR_CONT3 + ", NUTR_CONT4=" + NUTR_CONT4
-					+ ", NUTR_CONT5=" + NUTR_CONT5 + ", NUTR_CONT6=" + NUTR_CONT6 + ", NUTR_CONT7=" + NUTR_CONT7
-					+ ", NUTR_CONT8=" + NUTR_CONT8 + ", NUTR_CONT9=" + NUTR_CONT9 + ", BGN_YEAR=" + BGN_YEAR
-					+ ", ANIMAL_PLANT=" + ANIMAL_PLANT + "]";
+			return "FoodDto [bbsseq=" + bbsseq + ", desckor=" + desckor + ", servingwt=" + servingwt + ", nutrcont1="
+					+ nutrcont1 + ", nutrcont2=" + nutrcont2 + ", nutrcont3=" + nutrcont3 + ", nutrcont4=" + nutrcont4
+					+ ", nutrcont5=" + nutrcont5 + ", nutrcont6=" + nutrcont6 + ", nutrcont7=" + nutrcont7
+					+ ", nutrcont8=" + nutrcont8 + ", nutrcont9=" + nutrcont9 + ", bgnyear=" + bgnyear
+					+ ", animalplant=" + animalplant + "]";
 		}
+
+
+
+		
+		
+		
+	    
+		
 	    
 	    
 }

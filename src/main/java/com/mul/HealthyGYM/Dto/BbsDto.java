@@ -12,6 +12,16 @@ public class BbsDto implements Serializable {
 	private String wdate;
 	private String rdate;
 	
+	private String nickname;
+	
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
 	private int likecount;
 	private int readcount;
 	private int ref;
@@ -28,6 +38,25 @@ public class BbsDto implements Serializable {
 		this.title = title;
 		this.content = content;
 		this.bbstag = bbstag;
+	}
+
+	public BbsDto(int bbsseq, int memberseq, String title, String content, int bbstag, String wdate, String rdate,
+			String nickname, int likecount, int readcount, int ref, int del, String thumnail, int report) {
+		super();
+		this.bbsseq = bbsseq;
+		this.memberseq = memberseq;
+		this.title = title;
+		this.content = content;
+		this.bbstag = bbstag;
+		this.wdate = wdate;
+		this.rdate = rdate;
+		this.nickname = nickname;
+		this.likecount = likecount;
+		this.readcount = readcount;
+		this.ref = ref;
+		this.del = del;
+		this.thumnail = thumnail;
+		this.report = report;
 	}
 
 	public BbsDto(int bbsseq, int memberseq, String title, String content, int bbstag, String wdate, String rdate,
