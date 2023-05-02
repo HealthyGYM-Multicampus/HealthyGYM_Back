@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mul.HealthyGYM.Dao.RefreshTokenDao">
+	
+	<select id="findByEmail" parameterType="String" resultType="com.mul.HealthyGYM.Dto.RefreshTokenDto">
+		select *
+		from refreshtoken
+		where email=#{email}
+	</select>
+	
+	<insert id="save" parameterType="com.mul.HealthyGYM.Dto.RefreshTokenDto">
+		insert into refreshtoken
+		values(#{email}, #{rvalue})
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		delete from refreshtoken
+		where email=#{email}
+	</delete>
+</mapper>

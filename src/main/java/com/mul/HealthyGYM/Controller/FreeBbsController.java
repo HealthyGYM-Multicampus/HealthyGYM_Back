@@ -2,6 +2,7 @@ package com.mul.HealthyGYM.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mul.HealthyGYM.Dto.BbsCommentDto;
 import com.mul.HealthyGYM.Dto.BbsDto;
+import com.mul.HealthyGYM.Dto.BbsParam;
 import com.mul.HealthyGYM.Service.FreeBbsService;
 import com.mul.HealthyGYM.Util.FileUtility;
 
-import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 public class FreeBbsController {
@@ -26,18 +28,39 @@ public class FreeBbsController {
 	@Autowired
 	FreeBbsService service;
 	
-	@GetMapping("/freebbsdetail")
-	public List<Map<String, Object>> freebbsdetail(int bbsseq) {
-		System.out.println("freebbsdetail " + bbsseq + " " + new Date());
+	@GetMapping("/bbslist")
+	public List<Map<String, Object>> bbslist(BbsParam param) {
+		System.out.println("bbslist " + new Date());
 		
-		return service.freeBbsDetail(bbsseq);
+		int page = param.getPage();
+		param.setStart(1 + (page * 3));
+		param.setEnd((page + 1) * 3);
+		
+		return service.bbsList(param);
+	}
+	
+	@GetMapping("/freebbsdetail")
+	public List<Map<String, Object>> bbsdetail(BbsDto dto) {
+		System.out.println("freebbsdetail " + dto.getBbsseq() + " "+ dto.getMemberseq()+" " + new Date());
+		
+		// 게시글 상세 정보
+		List<Map<String, Object>> detail = service.bbsDetail(dto.getBbsseq());
+		
+		// 로그인한 유저의 좋아요 여부
+		boolean liking = false;
+		if(dto.getMemberseq() != 0) {
+			liking = service.checkLiking(dto);
+		}
+		detail.get(0).put("liking", liking);
+		
+		return detail;
 	}
 	
 	@GetMapping("/freebbscomment")
-	public List<Map<String, Object>> freebbscomment(int bbsseq) {
+	public List<Map<String, Object>> bbscomment(int bbsseq) {
 		System.out.println("freebbscomment "+ bbsseq + " " + new Date());
 		
-		return service.freeBbsComment(bbsseq);
+		return service.bbsComment(bbsseq);
 	}
 	
 	
@@ -53,16 +76,53 @@ public class FreeBbsController {
 		}
 	}
 	
+	@PostMapping("/writebbscomment")
+	public String writebbscomment(BbsCommentDto dto) {
+		System.out.println("writebbscomment " + new Date());
+		
+		if(service.writeBbsComment(dto)) {
+			return "OK";
+		} else {
+			return "NO";
+		}
+	}
+	
+	@PostMapping("/writebbsreply")
+	public String writebbsreply(BbsCommentDto dto) {
+		System.out.println("writebbsreply " + new Date());
+		
+		if(service.writeBbsReply(dto)) {
+			return "OK";
+		} else {
+			return "NO";
+		}
+	}
+	
 	@PostMapping("/likebbs")
 	public String likebbs(BbsDto dto) {
 		System.out.println("likebbs " + new Date());
 		
-		return "";
+		if(service.likeBbs(dto) & service.likecountUp(dto.getBbsseq())) {
+			return "OK";
+		} else {
+			return "NO";
+		}
+	}
+	
+	@PostMapping("/unlikebbs")
+	public String unlikebbs(BbsDto dto) {
+		System.out.println("unlikebbs " + new Date());
+		
+		if(service.unlikeBbs(dto) & service.likecountDown(dto.getBbsseq())) {
+			return "OK";
+		} else {
+			return "NO";
+		}
 	}
 
 	// 사용 안함 (파이어베이스로 대체함)
 	@PostMapping("/uploadfile")
-	public String uploadfile(@RequestParam(value = "imgfile", required = false) MultipartFile imgfile, HttpServletRequest req) throws IOException {
+	public String uploadfile(@RequestParam(value = "imgfile", required = false) MultipartFile imgfile, HttpRequest req) throws IOException {
 		
 		System.out.println("uploadfile " + new Date());
 		
