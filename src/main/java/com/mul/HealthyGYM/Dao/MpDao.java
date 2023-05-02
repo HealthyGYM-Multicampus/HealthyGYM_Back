@@ -25,4 +25,6 @@ public interface MpDao {
 
     List<InbodyDto> inbodyList(int memberseq);
 
+    void followUpdate(String beforename, String newname);
+
 }

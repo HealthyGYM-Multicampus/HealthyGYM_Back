@@ -24,8 +24,6 @@ import java.util.List;
 @RestController
 public class MpController {
 
-    public static int temp = 1;
-
     /*Window Os*/
     //public static String localPath =  "C:/upload/"
 
@@ -35,26 +33,24 @@ public class MpController {
     @Autowired
     MpService service;
 
-    @GetMapping(value = "/members/findmember")
-    public MemberDto findMember(HttpSession session) {
+    @PostMapping(value = "/members/findmember")
+    public MemberDto findMember(@RequestBody UserRequest userRequest) {
+        System.out.println("findMember " + new Date());
 
-        // <-- 임시 세팅
-        session.setAttribute("memberseq", temp);
-        // 임시 세팅 -->
+        String authToken = userRequest.getAuthToken();
+        int memberseq = Integer.parseInt(authToken);
 
-        int memberseq = (int) session.getAttribute("memberseq");
         MemberDto memberDto = service.findMemberById(memberseq);
         return memberDto;
     }
 
-    @GetMapping(value = "/members/findmemberinfo")
-    public MemberinfoDto findMemberinfo(HttpSession session) {
+    @PostMapping(value = "/members/findmemberinfo")
+    public MemberinfoDto findMemberinfo(@RequestBody UserRequest userRequest) {
+        System.out.println("findMemberinfo " + new Date());
 
-        // <-- 임시 세팅
-        session.setAttribute("memberseq", temp);
-        // 임시 세팅 -->
+        String authToken = userRequest.getAuthToken();
+        int memberseq = Integer.parseInt(authToken);
 
-        int memberseq = (int) session.getAttribute("memberseq");
         MemberinfoDto memberinfoDto = service.findMemberinfoById(memberseq);
         return memberinfoDto;
     }
@@ -62,7 +58,7 @@ public class MpController {
     @PostMapping(value = "/members/profileupdate")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public String profileUpdate(@ModelAttribute ProfileDto profileDto) throws IOException {
-        System.out.println("profileUpdate 메서드 실행");
+        System.out.println("profileUpdate " + new Date());
         service.profileUpdate(profileDto);
         return "ok";
     }
@@ -71,19 +67,17 @@ public class MpController {
     @PostMapping(value = "/members/profileupdatenull")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public String profileUpdateNull(@RequestBody ProfileDto profileDto) throws IOException {
-        System.out.println("profileUpdateNull 메서드 실행");
+        System.out.println("profileUpdateNull " + new Date());
         service.profileUpdate(profileDto);
         return "ok";
     }
 
-    @GetMapping(value = "/members/follow")
-    public Map<String, Object> followingMembers(HttpSession session) {
+    @PostMapping(value = "/members/follow")
+    public Map<String, Object> followingMembers(@RequestBody UserRequest userRequest) {
+        System.out.println("followingMembers " + new Date());
 
-        // <-- 임시 세팅
-        session.setAttribute("memberseq", temp);
-        // 임시 세팅 -->
-
-        int memberseq = (int) session.getAttribute("memberseq");
+        String authToken = userRequest.getAuthToken();
+        int memberseq = Integer.parseInt(authToken);
 
         List<FollowDto> followDtoList = service.followingMembers(memberseq);
         int followNum = followDtoList.size();
@@ -94,14 +88,12 @@ public class MpController {
         return map;
     }
 
-    @GetMapping(value = "/members/follower")
-    public Map<String, Object> followerMembers(HttpSession session) {
+    @PostMapping(value = "/members/follower")
+    public Map<String, Object> followerMembers(@RequestBody UserRequest userRequest) {
+        System.out.println("followerMembers " + new Date());
 
-        // <-- 임시 세팅
-        session.setAttribute("memberseq", temp);
-        // 임시 세팅 -->
-
-        int memberseq = (int) session.getAttribute("memberseq");
+        String authToken = userRequest.getAuthToken();
+        int memberseq = Integer.parseInt(authToken);
 
         List<FollowDto> followDtoList = service.followerembers(memberseq);
         int followerNum = followDtoList.size();
@@ -114,15 +106,11 @@ public class MpController {
 
     @PostMapping(value = "/members/pwdupdate")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public String pwdUpdate(HttpSession session, @RequestBody MemberDto memberDto) {
-        System.out.println("pwdUpdate진입");
+    public String pwdUpdate(@RequestBody MemberDto memberDto) {
+        System.out.println("pwdUpdate " + new Date());
         MemberDto dto = new MemberDto();
 
-        // <-- 임시 세팅
-        session.setAttribute("memberseq", temp);
-        // 임시 세팅 -->
-
-        int memberseq = (int) session.getAttribute("memberseq");
+        int memberseq = memberDto.getMemberseq();
         String pwd = memberDto.getPwd();
 
         dto.setMemberseq(memberseq);
@@ -134,8 +122,9 @@ public class MpController {
 
     @GetMapping(value = "/images/{folderName}/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<FileSystemResource> getImage(@PathVariable String folderName, @PathVariable String imageName) {
+        System.out.println("getImage " + new Date());
 
-        String imagePath = localPath + folderName + "/" + imageName; //mac OS
+        String imagePath = localPath + folderName + "/" + imageName;
 
         File imageFile = new File(imagePath);
         return ResponseEntity.ok()
@@ -144,16 +133,15 @@ public class MpController {
     }
 
     @PostMapping(value = "/ocr_fileUpload")
-    public String ocr_fileUpload(@RequestParam("uploadFile") MultipartFile uploadFile,
-                                 HttpServletRequest req, HttpSession session) {
-        System.out.println("NaverCloudController obj_detection " + new Date());
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public String ocr_fileUpload(@ModelAttribute ProfileDto profileDto) {
+        System.out.println("ocr_fileUpload " + new Date());
 
-        // 임시
-        session.setAttribute("memberseq", temp);
-        // 임시
+        MultipartFile uploadFile = profileDto.getUploadFile();
 
-        int memberseq = (int) session.getAttribute("memberseq");
+        int memberseq = profileDto.getMemberseq();
 
+        System.out.println("memberseq값은?"+memberseq);
         String originalFileName = uploadFile.getOriginalFilename();    //오리지날 파일명
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));    //파일 확장자
 
@@ -193,24 +181,18 @@ public class MpController {
         return result;
     }
 
-    @GetMapping(value = "/inbodylist")
-    public Map<String, Object> inbodyList(HttpSession session) {
-        System.out.println("inbodyList 진입");
+    @PostMapping(value = "/inbodylist")
+    public Map<String, Object> inbodyList(@RequestBody UserRequest userRequest) {
+        System.out.println("inbodyList " + new Date());
 
-        // 임시
-        session.setAttribute("memberseq", temp);
-        // 임시
-
-        int memberseq = (int) session.getAttribute("memberseq");
+        String authToken = userRequest.getAuthToken();
+        int memberseq = Integer.parseInt(authToken);
 
         List<InbodyDto> list = service.inbodyList(memberseq);
 
         Map<String, Object> map = new HashMap<>();
         map.put("list", list);
 
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println("inbodylist : " + list.get(i).toString());
-        }
         return map;
     }
 }

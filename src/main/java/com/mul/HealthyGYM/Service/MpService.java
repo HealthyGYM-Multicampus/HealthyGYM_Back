@@ -41,6 +41,9 @@ public class MpService {
     }
 
     public void profileUpdate(ProfileDto profileDto) throws IOException {
+        // 이전 닉네임
+        String beforeName = dao.findMemberById(profileDto.getMemberseq()).getNickname();
+
         if (profileDto.getImage() != null) {
             MultipartFile imageFile = profileDto.getImage();
             String storedFileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
@@ -51,6 +54,9 @@ public class MpService {
             profileDto.setProfile(storedFileName);
         }
         dao.profileUpdate(profileDto);
+
+        // 팔로우 테이블 닉네임 수정
+        dao.followUpdate(beforeName,profileDto.getNickname());
     }
 
     public List<FollowDto> followingMembers(int memberseq) {

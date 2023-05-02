@@ -59,4 +59,10 @@
 		where memberseq = #{memberseq}
 	</select>
 
+	<update id="followUpdate" parameterType="String">
+		UPDATE follow
+		SET foltarget = #{newname}
+		WHERE foltarget = #{beforename}
+	</update>
+
 </mapper>
