@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="com.mul.HealthyGYM.Dao.MessageDao">
+	
+		<select id="getnotreadmsgcnt" parameterType="Integer" resultType="Integer">
+			select count(*)
+			from message
+			where target = #{memberseq} and isread = 0
+		</select>
+		
+		<select id="getmessages" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.MessageDto">
+			SELECT *
+			FROM message
+			WHERE (memberseq = #{memberseq} AND target = #{target})
+			OR (memberseq = #{target} AND target = #{memberseq})
+			order by msgseq asc
+		</select>
+		
+		<select id="talkingmemberlist" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.MemberDto">
+			SELECT memberseq, profile, nickname
+			FROM member
+			WHERE memberseq IN (
+			  SELECT DISTINCT CASE
+			    WHEN memberseq = #{memberseq} THEN target
+			    WHEN target = #{memberseq} THEN memberseq
+			  END AS memberseq
+			  FROM message
+			  WHERE memberseq = #{memberseq} OR target = #{memberseq}
+			)
+		</select>
+		
+		<select id="isreadcnt" parameterType="Integer" resultType="Integer">
+			select count(*)
+			from message
+			where isread = 0 AND target = #{memberseq} AND memberseq = #{target}
+		</select>
+		
+		<select id="lastletter" parameterType="Integer" resultType="String">
+			select message
+			from message
+			where (target = #{memberseq} AND memberseq = #{target})
+			OR (memberseq = #{memberseq} AND target = #{target})
+			order by msgseq desc
+			limit 1
+		</select>
+		
+		<select id="wdate" parameterType="Integer" resultType="String">
+			select wdate
+			from message
+			where (target = #{memberseq} AND memberseq = #{target})
+			OR (memberseq = #{memberseq} AND target = #{target})
+			order by msgseq desc
+			limit 1
+		</select>
+		
+		<update id="readthemessage" parameterType="Integer">
+			update message
+			set isread = 1
+			where memberseq = #{target} AND target = #{memberseq}
+			OR (memberseq = #{memberseq} AND target = #{target})
+			order by msgseq desc
+			limit 1
+		</update>
+		
+		<insert id="sendmessage" parameterType="map">
+			insert into message (memberseq, target, message, wdate)
+			values (#{memberseq}, #{target}, #{writemessage}, now())
+		</insert>
+		
+	</mapper>

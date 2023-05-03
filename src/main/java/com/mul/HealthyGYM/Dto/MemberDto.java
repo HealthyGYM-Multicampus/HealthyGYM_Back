@@ -12,6 +12,11 @@ public class MemberDto {
     private int mailauth;
     private String mailkey;
     
+	private int isreadcnt;	// 대화 목록당 읽지 않은 메시지의 개수
+	private String lastletter;	// 가장 최근의 메시지
+	private String wdate;	// 가장 최근 메시지의 시간
+	
+	
 	public MemberDto() {}
 	
 	public MemberDto(String email, String pwd) {
@@ -50,6 +55,48 @@ public class MemberDto {
 		this.provider = provider;
 		this.mailauth = mailauth;
 		this.mailkey = mailkey;
+	}
+	
+    public MemberDto(int memberseq, String email, String pwd, int auth, String profile, int mailauth, String mailkey,
+			String nickname, int isreadcnt, String lastletter, String wdate) {
+		super();
+		this.memberseq = memberseq;
+		this.email = email;
+		this.pwd = pwd;
+		this.auth = auth;
+		this.profile = profile;
+		this.mailauth = mailauth;
+		this.mailkey = mailkey;
+		this.nickname = nickname;
+		this.isreadcnt = isreadcnt;
+		this.lastletter = lastletter;
+		this.wdate = wdate;
+	}
+    
+    
+
+	public int getIsreadcnt() {
+		return isreadcnt;
+	}
+
+	public void setIsreadcnt(int isreadcnt) {
+		this.isreadcnt = isreadcnt;
+	}
+
+	public String getLastletter() {
+		return lastletter;
+	}
+
+	public void setLastletter(String lastletter) {
+		this.lastletter = lastletter;
+	}
+
+	public String getWdate() {
+		return wdate;
+	}
+
+	public void setWdate(String wdate) {
+		this.wdate = wdate;
 	}
 
 	public int getMemberseq() {
