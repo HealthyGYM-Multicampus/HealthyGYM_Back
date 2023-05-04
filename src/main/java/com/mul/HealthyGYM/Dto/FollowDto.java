@@ -3,13 +3,9 @@ package com.mul.HealthyGYM.Dto;
 public class FollowDto {
     private int memberseq;
     private String foltarget;
+    private String profile;
 
     public FollowDto() {
-    }
-
-    public FollowDto(int memberseq, String foltarget) {
-        this.memberseq = memberseq;
-        this.foltarget = foltarget;
     }
 
     public int getMemberseq() {
@@ -28,8 +24,20 @@ public class FollowDto {
         this.foltarget = foltarget;
     }
 
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
     @Override
-    public String toString(){
-        return "FollowDto [memberseq=" + memberseq + ", foltarget=" + foltarget+ "]";
+    public String toString() {
+        return "FollowDto{" +
+                "memberseq=" + memberseq +
+                ", foltarget='" + foltarget + '\'' +
+                ", profile='" + profile + '\'' +
+                '}';
     }
 }
