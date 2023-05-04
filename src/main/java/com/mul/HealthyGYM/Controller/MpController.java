@@ -25,31 +25,30 @@ import java.util.List;
 public class MpController {
 
     /*Window Os*/
-    //public static String localPath =  "C:/upload/"
+    public static String localPath =  "C:/upload/";
 
     /*Mac Os*/
-    public static String localPath = "/Users/admin/springboot_img/";
+    //public static String localPath = "/Users/admin/springboot_img/";
 
     @Autowired
     MpService service;
 
     @PostMapping(value = "/members/findmember")
-    public MemberDto findMember(@RequestBody UserRequest userRequest) {
+    public MemberDto findMember(@RequestBody MemberDto dto) {
         System.out.println("findMember " + new Date());
 
-        String authToken = userRequest.getAuthToken();
-        int memberseq = Integer.parseInt(authToken);
+        int memberseq = dto.getMemberseq();
 
+        System.out.println("memberseq:"+memberseq);
         MemberDto memberDto = service.findMemberById(memberseq);
         return memberDto;
     }
 
     @PostMapping(value = "/members/findmemberinfo")
-    public MemberinfoDto findMemberinfo(@RequestBody UserRequest userRequest) {
+    public MemberinfoDto findMemberinfo(@RequestBody MemberDto dto) {
         System.out.println("findMemberinfo " + new Date());
 
-        String authToken = userRequest.getAuthToken();
-        int memberseq = Integer.parseInt(authToken);
+        int memberseq = dto.getMemberseq();
 
         MemberinfoDto memberinfoDto = service.findMemberinfoById(memberseq);
         return memberinfoDto;
@@ -73,11 +72,10 @@ public class MpController {
     }
 
     @PostMapping(value = "/members/follow")
-    public Map<String, Object> followingMembers(@RequestBody UserRequest userRequest) {
+    public Map<String, Object> followingMembers(@RequestBody MemberDto dto) {
         System.out.println("followingMembers " + new Date());
 
-        String authToken = userRequest.getAuthToken();
-        int memberseq = Integer.parseInt(authToken);
+        int memberseq = dto.getMemberseq();
 
         List<FollowDto> followDtoList = service.followingMembers(memberseq);
         int followNum = followDtoList.size();
@@ -89,11 +87,10 @@ public class MpController {
     }
 
     @PostMapping(value = "/members/follower")
-    public Map<String, Object> followerMembers(@RequestBody UserRequest userRequest) {
+    public Map<String, Object> followerMembers(@RequestBody MemberDto dto) {
         System.out.println("followerMembers " + new Date());
 
-        String authToken = userRequest.getAuthToken();
-        int memberseq = Integer.parseInt(authToken);
+        int memberseq = dto.getMemberseq();
 
         List<FollowDto> followDtoList = service.followerembers(memberseq);
         int followerNum = followDtoList.size();
@@ -136,19 +133,16 @@ public class MpController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public String ocr_fileUpload(@ModelAttribute ProfileDto profileDto) {
         System.out.println("ocr_fileUpload " + new Date());
+        int memberseq = profileDto.getMemberseq();
 
         MultipartFile uploadFile = profileDto.getUploadFile();
 
-        int memberseq = profileDto.getMemberseq();
-
-        System.out.println("memberseq값은?"+memberseq);
         String originalFileName = uploadFile.getOriginalFilename();    //오리지날 파일명
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));    //파일 확장자
 
         // UUID 사용하여 파일명 중복 문제 처리
         String filename = UUID.randomUUID() + extension;
         String filepath = localPath + "inbody/" + filename;
-
 
         System.out.println("업로드 경로 : " + filepath);
 
@@ -182,11 +176,10 @@ public class MpController {
     }
 
     @PostMapping(value = "/inbodylist")
-    public Map<String, Object> inbodyList(@RequestBody UserRequest userRequest) {
+    public Map<String, Object> inbodyList(@RequestBody MemberDto dto) {
         System.out.println("inbodyList " + new Date());
 
-        String authToken = userRequest.getAuthToken();
-        int memberseq = Integer.parseInt(authToken);
+        int memberseq = dto.getMemberseq();
 
         List<InbodyDto> list = service.inbodyList(memberseq);
 

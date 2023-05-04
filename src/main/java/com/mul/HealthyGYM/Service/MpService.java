@@ -1,10 +1,15 @@
 package com.mul.HealthyGYM.Service;
 
+import com.mul.HealthyGYM.Dao.MemberDao;
 import com.mul.HealthyGYM.Dao.MpDao;
+import com.mul.HealthyGYM.Dao.RefreshTokenDao;
 import com.mul.HealthyGYM.Dto.*;
+import com.mul.HealthyGYM.jwt.TokenProvider;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,10 +27,17 @@ import java.util.UUID;
 public class MpService {
 
     /*Window Os*/
-    //public static String localPath =  "C:/upload/"
+    public static String localPath =  "C:/upload/";
 
     /*Mac Os*/
-    public static String localPath = "/Users/admin/springboot_img/";
+    //public static String localPath = "/Users/admin/springboot_img/";
+
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public MpService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
     MpDao dao;
@@ -46,8 +58,10 @@ public class MpService {
 
         if (profileDto.getImage() != null) {
             MultipartFile imageFile = profileDto.getImage();
-            String storedFileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
+            String originalFileName = imageFile.getOriginalFilename();    //오리지날 파일명
+            String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
 
+            String storedFileName = UUID.randomUUID() + extension;
             String savePath = localPath + "profile/" + storedFileName;
             imageFile.transferTo(new File(savePath));
 
@@ -70,6 +84,8 @@ public class MpService {
     }
 
     public void pwdUpdate(MemberDto dto) {
+        dto.setPwd(passwordEncoder.encode(dto.getPwd()));
+
         dao.pwdUpdate(dto);
     }
 
