@@ -28,22 +28,41 @@
 
 	<update id="pwdUpdate" parameterType="com.mul.HealthyGYM.Dto.MemberDto">
 		UPDATE member
-			SET pwd = #{pwd}
+		SET pwd = #{pwd}
 		WHERE memberseq = #{memberseq}
 	</update>
 
-	<select id="followingMembers" parameterType="Integer"
+	<select id="followingMembers" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.FollowDto">
+		SELECT m.memberseq, f.foltarget, m.profile
+		FROM follow f
+				 JOIN member m ON m.nickname = f.foltarget
+		WHERE f.memberseq = #{memberseq}
+	</select>
+
+	<select id="followerMembers" parameterType="Integer"
 			resultType="com.mul.HealthyGYM.Dto.FollowDto">
+		SELECT f.memberseq, m.nickname as foltarget, m.profile
+		FROM follow f
+				 JOIN member m ON m.memberseq = f.memberseq
+		WHERE f.foltarget = (SELECT nickname FROM member WHERE memberseq = #{memberseq});
+	</select>
+
+	<insert id="inbodySave" parameterType="com.mul.HealthyGYM.Dto.InbodyDto">
+		insert into inbody(inbodyseq, memberseq, uploaddate, weight, musclemass, bodyfatmass, imgpath)
+		values (#{inbodyseq}, #{memberseq}, now(), #{weight}, #{musclemass}, #{bodyfatmass}, #{imgpath})
+	</insert>
+
+	<select id="inbodyList" parameterType="Integer"
+			resultType="com.mul.HealthyGYM.Dto.InbodyDto">
 		select *
-		from follow
+		from inbody
 		where memberseq = #{memberseq}
 	</select>
 
-	<select id="followerMembers" parameterType="String"
-			resultType="com.mul.HealthyGYM.Dto.FollowDto">
-		select *
-		from follow
-		where foltarget = #{nickname}
-	</select>
+	<update id="followUpdate" parameterType="String">
+		UPDATE follow
+		SET foltarget = #{newname}
+		WHERE foltarget = #{beforename}
+	</update>
 
 </mapper>

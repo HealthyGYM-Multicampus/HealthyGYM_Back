@@ -14,6 +14,7 @@ public class ProfileDto {
     private String profile;
 
     private MultipartFile image;
+    private MultipartFile uploadFile;
 
     public ProfileDto() {
     }
@@ -124,5 +125,13 @@ public class ProfileDto {
 
     public void setImage(MultipartFile image) {
         this.image = image;
+    }
+
+    public MultipartFile getUploadFile() {
+        return uploadFile;
+    }
+
+    public void setUploadFile(MultipartFile uploadFile) {
+        this.uploadFile = uploadFile;
     }
 }
