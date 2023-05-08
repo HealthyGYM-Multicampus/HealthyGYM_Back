@@ -84,9 +84,15 @@
 			and bbsseq=#{bbsseq}
 	</delete>
 	
+	<update id="deleteBbs" parameterType="Integer">
+		update bbs
+		set del=#{1}
+		where bbsseq=#{bbsseq}
+	</update>
 	
-	<insert id="uploadFile" parameterType="String">
-		insert into imgfile(imgfilename)
-		values(#{filename})
-	</insert>
+	<update id="updateBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
+		update bbs
+		set title=#{title}, content=#{content}, thumnail=#{thumnail}, rdate=now()
+		where bbsseq=#{bbsseq}
+	</update>
 </mapper>

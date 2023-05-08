@@ -28,5 +28,6 @@ public interface FreeBbsDao {
 	int likecountUp(int bbsseq);
 	int likecountDown(int bbsseq);
 	
-	int uploadFile(String filename);
+	int deleteBbs(int bbsseq);
+	int updateBbs(BbsDto dto);
 }

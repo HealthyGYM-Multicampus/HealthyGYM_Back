@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,12 +36,23 @@ public class AuthController {
 	@Autowired
 	MemberService memberService;
 	
+	@Value("${Kakao.client.id}")
+	private String kakaoId;
+	@Value("${Kakao.client.secret}")
+	private String kakaoSecret;
+	
+	@Value("${Google.client.id}")
+	private String googleId;
+	@Value("${Google.client.secret}")
+	private String googleSecret;
+	
 	// 자체 서비스 회원가입
 	@PostMapping("/signup")
 	public String signup(MemberDto dto) {
 		System.out.println("signup " + dto.toString());
 		dto.setProvider("own");
 		if(authService.signup(dto)) {
+			memberService.regiMemberinfo(dto.getEmail());
 			return "OK";
 		} else {
 			return "NO";
@@ -64,7 +76,7 @@ public class AuthController {
 		
 		MemberDto mem = memberService.findByEmail(dto.getEmail());
 		map.put("seq", mem.getMemberseq());
-
+		map.put("profile", mem.getProfile());
 		return map;
 	}
 
@@ -83,10 +95,10 @@ public class AuthController {
         
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         	params.add("grant_type", "authorization_code");
-        	params.add("client_id", "42e83bbe9bdc554d4bdc9ef3a4dc7b8a");
+        	params.add("client_id", kakaoId);
         	params.add("redirect_uri", "http://localhost:9100/login/callback/kakao");
         	params.add("code", code);
-        	params.add("client_secret", "GmvNrL1TdgllskAkHeE3Jlpm3g5udY2R");
+        	params.add("client_secret", kakaoSecret);
 
         HttpEntity<MultiValueMap<String, String>> kakaoRequest1 = new HttpEntity<>(params, headers);
 
@@ -123,7 +135,7 @@ public class AuthController {
         String nickname = ((JSONObject)kakao_account.get("profile")).getString("nickname");
         MemberDto mem = new MemberDto(email, "", nickname, "ROLE_USER", "kakao");
         
-        // 가입 여부 확인
+        // 3. 가입 여부 확인
         if(memberService.existsByEmail(email)) {
         	// 동일한 이메일이 다른 서비스(제공자)로 가입되어있으면 반려
         	String provider = memberService.checkProvider(email);
@@ -141,14 +153,19 @@ public class AuthController {
     			mem.setNickname(nickname);
     		}
     		authService.signup(mem);
+    		memberService.regiMemberinfo(email);
     		System.out.println("회원가입 완료");
     	}
-        // 로그인
+        // 4. 로그인
+        mem.setPwd("");
+        
         TokenDto token = authService.login(mem);
         System.out.println("토큰 발급");
         
+        mem = memberService.findByEmail(email);
         map.put("token", token);
-		map.put("seq", memberService.findSeqByEmail(email));
+		map.put("seq", mem.getMemberseq());
+		map.put("profile", mem.getProfile());
 		map.put("provider", "kakao");
 		
         return map;
@@ -168,10 +185,10 @@ public class AuthController {
         
         MultiValueMap<String, String> params1 = new LinkedMultiValueMap<>();
         	params1.add("grant_type", "authorization_code");
-        	params1.add("client_id", "1087556149477-h0s5bq18kpqmk1ndd3vg3vbpkvf6vvn6.apps.googleusercontent.com");
+        	params1.add("client_id", googleId);
         	params1.add("redirect_uri", "http://localhost:9100/login/callback/google");
         	params1.add("code", code);
-        	params1.add("client_secret", "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");
+        	params1.add("client_secret", googleSecret);
 
         HttpEntity<MultiValueMap<String, String>> googleRequest1 = new HttpEntity<>(params1, headers1);
 
@@ -210,7 +227,7 @@ public class AuthController {
         String nickname = body.getString("name");
         MemberDto mem = new MemberDto(email, "", nickname, "ROLE_USER", "google");
         
-        // 가입 여부 확인
+        // 3. 가입 여부 확인
         if(memberService.existsByEmail(email)) {
         	// 동일한 이메일이 다른 서비스(제공자)로 가입되어있으면 반려
         	String provider = memberService.checkProvider(email);
@@ -228,14 +245,19 @@ public class AuthController {
     			mem.setNickname(nickname);
     		}
     		authService.signup(mem);
+    		memberService.regiMemberinfo(email);
     		System.out.println("회원가입 완료");
     	}
-        // 로그인
+        // 4. 로그인
+        mem.setPwd("");
+        
         TokenDto token = authService.login(mem);
         System.out.println("토큰 발급");
         
+        mem = memberService.findByEmail(email);
         map.put("token", token);
-		map.put("seq", memberService.findSeqByEmail(email));
+		map.put("seq", mem.getMemberseq());
+		map.put("profile", mem.getProfile());
 		map.put("provider", "google");
 		
         return map;

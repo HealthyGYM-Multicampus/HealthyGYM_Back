@@ -4,6 +4,10 @@
 
 <mapper namespace="com.mul.HealthyGYM.Dao.MemberDao">
 	
+	<select id="findProfile" parameterType="Integer" resultType="String">
+		select profile from member where memberseq=#{memberseq}
+	</select>
+	
 	<select id="findBySeq" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.MemberDto">
 		select *
 		from member
@@ -50,6 +54,11 @@
 		values(#{email}, #{nickname}, 1, "default.png", "ROLE_USER")
 	</insert>
 	
+	<insert id="regiMemberinfo" parameterType="String">
+		insert into memberinfo(memberseq)
+		values((select memberseq from member where email=#{email}))
+	</insert>
+	
 	<update id="updatePwd" parameterType="com.mul.HealthyGYM.Dto.MemberDto">
 		update member
 		set pwd=#{pwd}
@@ -58,7 +67,7 @@
 	
 	<update id="updateMailKey" parameterType="com.mul.HealthyGYM.Dto.MemberDto">
 		update member
-		set mailKey=#{mailKey}
+		set mailkey=#{mailkey}
 		where email=#{email}
 	</update>
 
