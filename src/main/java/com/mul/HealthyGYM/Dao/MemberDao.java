@@ -9,6 +9,7 @@ import com.mul.HealthyGYM.Dto.MemberDto;
 @Repository
 public interface MemberDao {
 	
+	String findProfile(int memberseq);
 	MemberDto findBySeq(int memberseq);
 	MemberDto findByEmail(String email);
 	int findSeqByEmail(String email);
@@ -18,6 +19,7 @@ public interface MemberDao {
 	
 	int signup(MemberDto dto);
 	int signupOAuth(MemberDto dto);
+	int regiMemberinfo(String email);
 	
 	int updatePwd(MemberDto dto);
 	int updateMailKey(MemberDto dto);
