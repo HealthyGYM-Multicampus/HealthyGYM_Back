@@ -31,6 +31,17 @@
 			)
 		</select>
 		
+		<select id="recommendmealmsgrecv" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.FoodDto">
+			select *
+			from mealrecommend
+			where msgseq IN ( select msgseq
+						      from message
+						      where (memberseq = #{memberseq} AND target = #{target})
+							  OR (memberseq = #{target} AND target = #{memberseq})
+							  order by msgseq asc )
+		
+		</select>
+		
 		<select id="isreadcnt" parameterType="Integer" resultType="Integer">
 			select count(*)
 			from message
@@ -59,14 +70,41 @@
 			update message
 			set isread = 1
 			where memberseq = #{target} AND target = #{memberseq}
-			OR (memberseq = #{memberseq} AND target = #{target})
+			<!-- OR (memberseq = #{memberseq} AND target = #{target})
 			order by msgseq desc
-			limit 1
+			limit 1 -->
 		</update>
 		
+		<!-- msgseq 반환 X 일반 메시지 전송 -->
 		<insert id="sendmessage" parameterType="map">
 			insert into message (memberseq, target, message, wdate)
 			values (#{memberseq}, #{target}, #{writemessage}, now())
 		</insert>
+		
+		<select id="getlastmsgseq" resultType="Integer">
+			select msgseq
+			from message
+			order by msgseq desc
+			limit 1
+		</select>
+		
+		<!-- 자동 증가된 msgseq를 반환하는 쿼리 -->
+		<insert id="sendmessage2" parameterType="com.mul.HealthyGYM.Dto.MessageDto" useGeneratedKeys="true" keyProperty="msgseq" keyColumn="msgseq">
+		    insert into message (memberseq, target, message, wdate)
+		    values (#{memberseq}, #{target}, #{message}, now())
+		</insert>
+
+
+
+		
+		<insert id="sendmessage3" parameterType="com.mul.HealthyGYM.Dto.FoodDto">
+			insert into mealrecommend (msgseq, whenmeal, DESCKOR, SERVINGWT, NUTRCONT1, NUTRCONT2, 
+				NUTRCONT3, NUTRCONT4, NUTRCONT5, NUTRCONT6, NUTRCONT7, NUTRCONT8, NUTRCONT9, 
+				BGNYEAR, ANIMALPLANT)
+			values (#{msgseq}, #{whenmeal}, #{desckor}, #{servingwt}, #{nutrcont1}, #{nutrcont2}, #{nutrcont3}, #{nutrcont4}, #{nutrcont5}, #{nutrcont6}, #{nutrcont7}, #{nutrcont8}, #{nutrcont9}, #{bgnyear}, #{animalplant})
+		</insert>
+
+
+		
 		
 	</mapper>

@@ -1,8 +1,13 @@
 package com.mul.HealthyGYM.Dto;
 
+import java.math.BigInteger;
+
 public class FoodDto {
 		private int bbsseq;
-	 	private String desckor;
+		private int msgseq;
+		private int whenmeal;
+
+		private String desckor;
 	    private String servingwt;
 	    private String nutrcont1;
 	    private String nutrcont2;
@@ -40,6 +45,14 @@ public class FoodDto {
 		}
 
 		
+		public int getWhenmeal() {
+			return whenmeal;
+		}
+
+		public void setWhenmeal(int whenmeal) {
+			this.whenmeal = whenmeal;
+		}
+
 		public int getBbsseq() {
 			return bbsseq;
 		}
@@ -151,15 +164,27 @@ public class FoodDto {
 		public void setAnimalplant(String animalplant) {
 			this.animalplant = animalplant;
 		}
+		
+	 	public int getMsgseq() {
+			return msgseq;
+		}
+
+		public void setMsgseq(int msgseq2) {
+			this.msgseq = msgseq2;
+		}
 
 		@Override
 		public String toString() {
-			return "FoodDto [bbsseq=" + bbsseq + ", desckor=" + desckor + ", servingwt=" + servingwt + ", nutrcont1="
-					+ nutrcont1 + ", nutrcont2=" + nutrcont2 + ", nutrcont3=" + nutrcont3 + ", nutrcont4=" + nutrcont4
-					+ ", nutrcont5=" + nutrcont5 + ", nutrcont6=" + nutrcont6 + ", nutrcont7=" + nutrcont7
-					+ ", nutrcont8=" + nutrcont8 + ", nutrcont9=" + nutrcont9 + ", bgnyear=" + bgnyear
-					+ ", animalplant=" + animalplant + "]";
+			return "FoodDto [bbsseq=" + bbsseq + ", msgseq=" + msgseq + ", whenmeal=" + whenmeal + ", desckor="
+					+ desckor + ", servingwt=" + servingwt + ", nutrcont1=" + nutrcont1 + ", nutrcont2=" + nutrcont2
+					+ ", nutrcont3=" + nutrcont3 + ", nutrcont4=" + nutrcont4 + ", nutrcont5=" + nutrcont5
+					+ ", nutrcont6=" + nutrcont6 + ", nutrcont7=" + nutrcont7 + ", nutrcont8=" + nutrcont8
+					+ ", nutrcont9=" + nutrcont9 + ", bgnyear=" + bgnyear + ", animalplant=" + animalplant + "]";
 		}
+
+		
+
+		
 
 
 
