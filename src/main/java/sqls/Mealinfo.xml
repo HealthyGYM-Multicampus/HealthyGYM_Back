@@ -5,14 +5,12 @@
 <mapper namespace="com.mul.HealthyGYM.Dao.MealDao">
 
 
-	<insert id="insertMeal" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
+	<insert id="insertMeal" parameterType="com.mul.HealthyGYM.Dto.BbsDto" useGeneratedKeys="true" keyProperty="bbsseq" keyColumn="bbsseq">
 		insert into bbs (memberseq, title, content, bbstag)
 		values(#{memberseq}, #{title}, #{content}, #{bbstag})
 	</insert>
 	
-	<select id="getLastInsertId" resultType="Integer">
-		select last_insert_id();
-	</select>
+
 	
 	<insert id="writemeal2" parameterType="com.mul.HealthyGYM.Dto.FoodDto">
 		insert into meal_ingredients (bbsseq, DESCKOR, SERVINGWT, NUTRCONT1, NUTRCONT2, 

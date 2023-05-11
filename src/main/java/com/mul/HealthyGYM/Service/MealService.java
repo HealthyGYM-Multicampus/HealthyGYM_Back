@@ -33,16 +33,17 @@ public class MealService {
 	}
 
 
-	public boolean writemeal1(BbsDto bbsdto) {
-
+	public int writemeal1(BbsDto bbsdto) {
+		mealDao.insertMeal(bbsdto);
+		int bbsseq = bbsdto.getBbsseq();
 		
-		return mealDao.insertMeal(bbsdto)>0?true:false;
+		return bbsseq;
 	}
 
 
-	public boolean writemeal2(List<FoodDto> foodDtoList) {
+	public boolean writemeal2(List<FoodDto> foodDtoList, int bbsseq) {
 		int count = 0;
-		int bbsseq = mealDao.getLastInsertId();
+		System.out.println("writemeal2: bbsseq = " + bbsseq);
 		
 		for (FoodDto foodDto : foodDtoList) {
 			foodDto.setBbsseq(bbsseq);		// 어떤 게시물에 해당하는 건지 객체마다 설정.
@@ -50,7 +51,7 @@ public class MealService {
 			count += mealDao.writemeal2(foodDto);
 			System.out.println(foodDto.toString());
 		}
-		
+		System.out.println(count + " : count");
 		return count>0?true:false;
 	}
 
@@ -168,6 +169,9 @@ public class MealService {
 		
 		return n>0?true:false;
 	}
+
+
+
 	
 	
 
