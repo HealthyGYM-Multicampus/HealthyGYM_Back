@@ -2,8 +2,6 @@ package com.mul.HealthyGYM.Controller;
 
 import com.mul.HealthyGYM.Dto.*;
 import com.mul.HealthyGYM.Service.MpService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
@@ -39,7 +37,6 @@ public class MpController {
 
         int memberseq = dto.getMemberseq();
 
-        System.out.println("memberseq:"+memberseq);
         MemberDto memberDto = service.findMemberById(memberseq);
         return memberDto;
     }
@@ -131,8 +128,10 @@ public class MpController {
 
     @PostMapping(value = "/ocr_fileUpload")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public String ocr_fileUpload(@ModelAttribute ProfileDto profileDto) {
+    public InbodyDto ocr_fileUpload(@ModelAttribute ProfileDto profileDto) {
         System.out.println("ocr_fileUpload " + new Date());
+        InbodyDto inbodyDto = new InbodyDto();
+
         int memberseq = profileDto.getMemberseq();
 
         MultipartFile uploadFile = profileDto.getUploadFile();
@@ -167,25 +166,70 @@ public class MpController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "fail";
+            inbodyDto.setImgpath("이미지 저장 실패");
+            return inbodyDto;
         }
 
-        String result = service.ocr(filepath, memberseq, filename);
+        InbodyDto result = service.ocr(filepath, memberseq, filename);
 
+        System.out.println("result:"+result);
         return result;
     }
 
-    @PostMapping(value = "/inbodylist")
+    @PostMapping(value = "/bodycomlist")
     public Map<String, Object> inbodyList(@RequestBody MemberDto dto) {
-        System.out.println("inbodyList " + new Date());
+        System.out.println("bodycomList " + new Date());
 
         int memberseq = dto.getMemberseq();
 
-        List<InbodyDto> list = service.inbodyList(memberseq);
+        List<InbodyDto> list = service.bodycomList(memberseq);
 
         Map<String, Object> map = new HashMap<>();
         map.put("list", list);
 
         return map;
+    }
+
+    @PostMapping(value = "/mypage/mybbs")
+    public List<Map<String, Object>> bbsImageList(@RequestBody UserBbsParam userBbsParam) {
+        System.out.println("bbsImageList" + new Date());
+        int tag = userBbsParam.getBbstag();
+        if(tag != 0){
+            return service.myBbsList(userBbsParam);
+        } else {
+            return service.myAllBbsList(userBbsParam);
+        }
+    }
+
+    @PostMapping(value = "/mypage/mycmtbbs")
+    public List<Map<String, Object>> myCmtBbs(@RequestBody UserBbsParam userBbsParam) {
+        System.out.println("myCmtBbs" + new Date());
+        int tag = userBbsParam.getBbstag();
+        if(tag != 0){
+            return service.myCmtBbsList(userBbsParam);
+        } else {
+            return service.myAllCmtBbsList(userBbsParam);
+        }
+    }
+
+    @PostMapping(value = "/mypage/mylikebbs")
+    public List<Map<String, Object>> myLikeBbs(@RequestBody UserBbsParam userBbsParam) {
+        System.out.println("myCmtBbs" + new Date());
+        int tag = userBbsParam.getBbstag();
+        if(tag != 0){
+            return service.myLikeBbsList(userBbsParam);
+        } else {
+            return service.myAllLikeBbsList(userBbsParam);
+        }
+    }
+
+    @PostMapping(value = "/userbodycom")
+    public String bodyComSave(@RequestBody InbodyDto inbodyDto){
+        System.out.println("userBodyCom" + new Date());
+        System.out.println(inbodyDto.toString());
+
+        service.bodyComSave(inbodyDto);
+
+        return "ok";
     }
 }
