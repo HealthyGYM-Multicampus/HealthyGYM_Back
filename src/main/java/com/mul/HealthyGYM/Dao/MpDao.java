@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -23,8 +24,22 @@ public interface MpDao {
 
     void inbodySave(InbodyDto dto);
 
-    List<InbodyDto> inbodyList(int memberseq);
+    List<InbodyDto> bodycomList(int memberseq);
 
     void followUpdate(String beforename, String newname);
+
+    List<Map<String, Object>> myBbsList(UserBbsParam userBbsParam);
+
+    List<Map<String, Object>> myAllBbsList(UserBbsParam userBbsParam);
+
+    void bodyComSave(InbodyDto inbodyDto);
+
+    List<Map<String, Object>> myCmtBbsList(UserBbsParam userBbsParam);
+
+    List<Map<String, Object>> myAllCmtBbsList(UserBbsParam userBbsParam);
+
+    List<Map<String, Object>> myLikeBbsList(UserBbsParam userBbsParam);
+
+    List<Map<String, Object>> myAllLikeBbsList(UserBbsParam userBbsParam);
 
 }

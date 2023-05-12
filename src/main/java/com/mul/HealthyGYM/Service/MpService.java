@@ -1,14 +1,10 @@
 package com.mul.HealthyGYM.Service;
 
-import com.mul.HealthyGYM.Dao.MemberDao;
 import com.mul.HealthyGYM.Dao.MpDao;
-import com.mul.HealthyGYM.Dao.RefreshTokenDao;
 import com.mul.HealthyGYM.Dto.*;
-import com.mul.HealthyGYM.jwt.TokenProvider;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -89,8 +82,11 @@ public class MpService {
         dao.pwdUpdate(dto);
     }
 
-    public String ocr(String filepath, int memberseq, String filename) {
+    public InbodyDto ocr(String filepath, int memberseq, String filename) {
         System.out.println("OCR메서드 진입");
+
+        InbodyDto result = new InbodyDto();
+
         String apiURL = "https://w61ss3a1a3.apigw.ntruss.com/custom/v1/21554/64ff011f8ec39d04be66a679b81f665b47a00ed8b04828903e497e21061fef43/infer";
         String secretKey = "Y1RMWVBvSXZpQk1Lam5iZnNpa3RXc1RpaW1YZW5GVXQ=";
 
@@ -177,17 +173,18 @@ public class MpService {
 
             InbodyDto inbodyDto = new InbodyDto(memberseq, weight, musclemass, bodyfatmass, filename);
 
-            System.out.println(inbodyDto.getMusclemass());
+            result = inbodyDto;
 
             dao.inbodySave(inbodyDto);
 
         } catch (Exception e) {
             System.out.println(e);
 
-            return "fail";
+            return result;
         }
 
-        return response.toString();
+        System.out.println("response.toString():"+response.toString());
+        return result;
     }
 
     private void writeMultiPart(OutputStream out, String jsonMessage, File file, String boundary) throws
@@ -225,7 +222,35 @@ public class MpService {
         out.flush();
     }
 
-    public List<InbodyDto> inbodyList(int memberseq) {
-        return dao.inbodyList(memberseq);
+    public List<InbodyDto> bodycomList(int memberseq) {
+        return dao.bodycomList(memberseq);
+    }
+
+    public List<Map<String, Object>> myBbsList(UserBbsParam userBbsParam) {
+        return dao.myBbsList(userBbsParam);
+    }
+
+    public List<Map<String, Object>> myAllBbsList(UserBbsParam userBbsParam) {
+        return dao.myAllBbsList(userBbsParam);
+    }
+
+    public void bodyComSave(InbodyDto inbodyDto) {
+        dao.bodyComSave(inbodyDto);
+    }
+
+    public List<Map<String, Object>> myCmtBbsList(UserBbsParam userBbsParam) {
+        return dao.myCmtBbsList(userBbsParam);
+    }
+
+    public List<Map<String, Object>> myAllCmtBbsList(UserBbsParam userBbsParam) {
+        return dao.myAllCmtBbsList(userBbsParam);
+    }
+
+    public List<Map<String, Object>> myLikeBbsList(UserBbsParam userBbsParam) {
+        return dao.myLikeBbsList(userBbsParam);
+    }
+
+    public List<Map<String, Object>> myAllLikeBbsList(UserBbsParam userBbsParam) {
+        return dao.myAllLikeBbsList(userBbsParam);
     }
 }
