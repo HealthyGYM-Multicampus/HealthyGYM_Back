@@ -1,6 +1,7 @@
 package com.mul.HealthyGYM.Controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -21,6 +21,8 @@ import java.net.URLEncoder;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mul.HealthyGYM.Dto.BbsCommentDto;
 import com.mul.HealthyGYM.Dto.BbsDto;
@@ -29,7 +31,6 @@ import com.mul.HealthyGYM.Dto.FoodDto;
 import com.mul.HealthyGYM.Dto.MealCommentMemberDto;
 import com.mul.HealthyGYM.Service.MealService;
 
-import jakarta.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -44,19 +45,21 @@ public class MealController {
 	}
 	
 	@GetMapping(value = "FindMealList")
-	public List<FoodDto> FindMealList(String search) throws IOException{
+	public List<FoodDto> FindMealList(String search, int pageNo) throws IOException{
 		
 		// System.out.println(search);
-		
+		// System.out.println(pageNo);
+		String pageNoStr = String.valueOf(pageNo);
+		System.out.println(pageNoStr);
 		
 		
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1471000/FoodNtrIrdntInfoService1/getFoodNtrItdntList1"); //URL
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=aod5N32JX4OSOPRMyQPTw8VUZxR9zvbrkDLsrM%2BdNRtHP%2BuVlr31Np4fWwVVYm131hApK%2FB4auwWMKzrMmqMhg%3D%3D"); //Service Key
         urlBuilder.append("&" + URLEncoder.encode("desc_kor","UTF-8") + "=" + URLEncoder.encode(search, "UTF-8")); //식품이름
-        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); //페이지번호
-        // 당장은 100개까지만 보이도록 했습니다. 100개가 넘어가는 경우결과 창에서 페이지 total count를 가공하여 페이징 해주면 될거같습니다.
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode(pageNoStr, "UTF-8")); //페이지번호
         
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100", "UTF-8")); //한 페이지 결과 수
+        
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10", "UTF-8")); //한 페이지 결과 수
         urlBuilder.append("&" + URLEncoder.encode("bgn_year","UTF-8") + "=" + URLEncoder.encode("", "UTF-8")); //구축년도
         urlBuilder.append("&" + URLEncoder.encode("animal_plant","UTF-8") + "=" + URLEncoder.encode("", "UTF-8")); //가공업체
         urlBuilder.append("&" + URLEncoder.encode("type","UTF-8") + "=" + URLEncoder.encode("json", "UTF-8")); //응답데이터 형식(xml/json) Default: xml
@@ -87,26 +90,34 @@ public class MealController {
         
         JSONObject jsonObject = new JSONObject(jsonString);
         JSONObject body = jsonObject.getJSONObject("body");
-        JSONArray items = body.getJSONArray("items");
         
-        for(int i=0; i<items.length(); i++) {
-            JSONObject item = items.getJSONObject(i);
-            FoodDto dto = new FoodDto();
-            dto.setDesckor(item.getString("DESC_KOR"));
-            dto.setServingwt(item.getString("SERVING_WT"));
-            dto.setNutrcont1(item.getString("NUTR_CONT1"));
-            dto.setNutrcont2(item.getString("NUTR_CONT2"));
-            dto.setNutrcont3(item.getString("NUTR_CONT3"));
-            dto.setNutrcont4(item.getString("NUTR_CONT4"));
-            dto.setNutrcont5(item.getString("NUTR_CONT5"));
-            dto.setNutrcont6(item.getString("NUTR_CONT6"));
-            dto.setNutrcont7(item.getString("NUTR_CONT7"));
-            dto.setNutrcont8(item.getString("NUTR_CONT8"));
-            dto.setNutrcont9(item.getString("NUTR_CONT9"));
-            dto.setBgnyear(item.getString("BGN_YEAR"));
-            dto.setAnimalplant(item.getString("ANIMAL_PLANT"));
-            FoodDtoList.add(dto); // 리스트에 Dto 추가
+        
+        if(body.has("items")) {
+        	JSONArray items = body.getJSONArray("items");
+            for(int i=0; i<items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+                FoodDto dto = new FoodDto();
+                dto.setDesckor(item.getString("DESC_KOR"));
+                dto.setServingwt(item.getString("SERVING_WT"));
+                dto.setNutrcont1(item.getString("NUTR_CONT1"));
+                dto.setNutrcont2(item.getString("NUTR_CONT2"));
+                dto.setNutrcont3(item.getString("NUTR_CONT3"));
+                dto.setNutrcont4(item.getString("NUTR_CONT4"));
+                dto.setNutrcont5(item.getString("NUTR_CONT5"));
+                dto.setNutrcont6(item.getString("NUTR_CONT6"));
+                dto.setNutrcont7(item.getString("NUTR_CONT7"));
+                dto.setNutrcont8(item.getString("NUTR_CONT8"));
+                dto.setNutrcont9(item.getString("NUTR_CONT9"));
+                dto.setBgnyear(item.getString("BGN_YEAR"));
+                dto.setAnimalplant(item.getString("ANIMAL_PLANT"));
+                FoodDtoList.add(dto); // 리스트에 Dto 추가
+            }
         }
+        else {
+        	return FoodDtoList;
+        }
+        
+
         
 //        for (FoodDto foodDto : FoodDtoList) {
 //			System.out.println(foodDto);
@@ -116,30 +127,28 @@ public class MealController {
 	}
 	
 	@PostMapping(value = "/writemeal1")
-	public String writemeal1(BbsDto bbsdto) {
+	public int writemeal1(BbsDto bbsdto) {
 		System.out.println("writemeal1 " + new Date());
 		// System.out.println(bbsdto.toString());
 		
 		
-		if(mealservice.writemeal1(bbsdto)) {
-			return "OK";
-		} else {
-			return "FALSE";
-		}
+		return mealservice.writemeal1(bbsdto);
+			
+		
 		
 		
 		
 	}
 	
 	@PostMapping(value = "/writemeal2", consumes = "application/json")
-	public String writemeal2(@RequestBody String selectedItemsJson) throws IOException {
+	public String writemeal2(@RequestBody String selectedItemsJson, int bbsseq) throws IOException {
 		
 		
 		System.out.println("writemeal2 " + new Date());
 		
-		// 다시 json 파싱 하는 방법을 택했어요............... null로 받아오는거나 배열 통신오류를 멈출 수 없습니다.
 		ObjectMapper objectMapper = new ObjectMapper();
         List<FoodDto> foodDtoList = objectMapper.readValue(selectedItemsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, FoodDto.class));
+        System.out.println("writemeal2 : "+foodDtoList.toString());
         
         /*
         for(FoodDto food : foodDtoList) {
@@ -160,7 +169,7 @@ public class MealController {
         }
         */
         
-        if(mealservice.writemeal2(foodDtoList)) {
+        if(mealservice.writemeal2(foodDtoList, bbsseq)) {
         	return "OK";
         } else {
         	return "FALSE";
@@ -252,7 +261,11 @@ public class MealController {
 		return mealservice.getmealcomments(bbsseq, memberseq);
 	}
 	
-	
+
+
+
+
+
 	
 
 	

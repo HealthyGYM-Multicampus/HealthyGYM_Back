@@ -63,7 +63,11 @@ public class FreeBbsService {
 		return dao.likecountDown(bbsseq) > 0;
 	}
 	
-	public boolean uploadFile(String filename) {
-		return dao.uploadFile(filename) > 0;
+	public boolean deleteBbs(int bbsseq) {
+		return dao.deleteBbs(bbsseq) > 0;
+	}
+	
+	public boolean updateBbs(BbsDto dto) {
+		return dao.updateBbs(dto) > 0;
 	}
 }
