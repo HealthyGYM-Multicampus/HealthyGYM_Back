@@ -37,16 +37,19 @@ public class HealthController {
 		param.setBodypart(list.toArray(new String[0]));
 		
 		int page = param.getPage();
-		param.setStart(1 + (page * 3));
-		param.setEnd((page + 1) * 3);
+		param.setStart(1 + (page * 8));
+		param.setEnd((page + 1) * 8);
 		
-		System.out.println(param.toString());
+		//System.out.println(param.toString());
 		return service.getList(param);
 	}
 	
 	@GetMapping("/getdetail")
-	public List<Map<String, Object>> getDetail(int bbsseq) {
+	public List<Map<String, Object>> getDetail(int bbsseq, boolean visit) {
 		System.out.println("mate getDetail ");
+		
+		// 조회수
+		if(visit) service.readcountUp(bbsseq);
 		
 		return service.getDetail(bbsseq);
 	}
@@ -60,6 +63,18 @@ public class HealthController {
 									bodypart[0], bodypart[1], bodypart[2], bodypart[3], 
 									bodypart[4], bodypart[5], bodypart[6]);
 		
-		return service.writeMatebbs(bbsdto, matedto);
+		return service.writeMateBbs(bbsdto, matedto);
+	}
+	
+	@PostMapping("/update")
+	public boolean updateMate(BbsDto bbsdto, MateDto dto, boolean[] bodypart) {
+		System.out.println("updateMate ");
+		
+		MateDto matedto = new MateDto(0, dto.getAddressfirst(), dto.getAddresssecond(), 
+									dto.getCenter(), dto.getMdate(), dto.getMtime(), 
+									bodypart[0], bodypart[1], bodypart[2], bodypart[3], 
+									bodypart[4], bodypart[5], bodypart[6]);
+
+		return service.updateMateBbs(bbsdto, matedto);
 	}
 }

@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.mul.HealthyGYM.Dto.BbsCommentDto;
+import com.mul.HealthyGYM.Dto.BbsCommentParam;
 import com.mul.HealthyGYM.Dto.BbsDto;
 import com.mul.HealthyGYM.Dto.BbsParam;
 
@@ -18,7 +19,7 @@ public interface FreeBbsDao {
 	List<Map<String, Object>> bbsDetail(int bbsseq);
 	int checkLiking(BbsDto dto);
 	
-	List<Map<String, Object>> bbsComment(int bbsseq);
+	List<Map<String, Object>> bbsComment(BbsCommentParam param);
 	int writeBbs(BbsDto dto);
 	int writeBbsComment(BbsCommentDto dto);
 	int writeBbsReply(BbsCommentDto dto);
@@ -30,4 +31,8 @@ public interface FreeBbsDao {
 	
 	int deleteBbs(int bbsseq);
 	int updateBbs(BbsDto dto);
+	int updateBbsComment(BbsCommentDto dto);
+	int deleteBbsComment(int commentseq);
+	
+	int readcountUp(int bbsseq);
 }

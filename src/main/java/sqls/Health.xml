@@ -42,5 +42,25 @@
 		values(#{memberseq}, #{title}, #{content}, #{bbstag})
 	</insert>
 	
+	<update id="updateMate" parameterType="com.mul.HealthyGYM.Dto.MateDto">
+		update mate
+		set addressfirst=#{addressfirst}, addresssecond=#{addresssecond}, center=#{center}, 
+			mdate=#{mdate}, mtime=#{mtime}, back=#{back}, chest=#{chest}, shoulder=#{shoulder}, 
+			arm=#{arm}, abs=#{abs}, leg=#{leg}, run=#{run}
+		where bbsseq=#{bbsseq}
+	</update>
+	
+	<update id="updateBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto"
+			useGeneratedKeys="true" keyProperty="bbsseq" keyColumn="bbsseq">
+		update bbs
+		set title=#{title}, content=#{content}
+		where bbsseq=#{bbsseq}
+	</update>
+	
+	<update id="readcountUp" parameterType="Integer">
+		update bbs
+		set readcount=readcount+1
+		where bbsseq=#{bbsseq}
+	</update>
 	
 </mapper>
