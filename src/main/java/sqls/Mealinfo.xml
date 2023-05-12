@@ -26,6 +26,7 @@
         b.memberseq, b.nickname
       FROM bbs a, member b
       WHERE a.memberseq = b.memberseq
+      AND a.bbstag=10
       ORDER BY bbsseq DESC LIMIT #{offset}, #{limit}
     </when>
     <when test="select == 'follow'">
@@ -33,6 +34,7 @@
         b.memberseq, b.nickname
       FROM bbs a, member b, follow c
       WHERE a.memberseq = b.memberseq
+      	AND a.bbstag=10
         AND b.memberseq = c.memberseq
         AND c.memberseq = #{memberseq}
       ORDER BY bbsseq DESC LIMIT #{offset}, #{limit}
@@ -42,6 +44,7 @@
         b.memberseq, b.nickname
       FROM bbs a, member b
       WHERE a.memberseq = b.memberseq
+      	AND a.bbstag=10
         AND a.title LIKE CONCAT('%', #{search}, '%')
       ORDER BY bbsseq DESC LIMIT #{offset}, #{limit}
     </when>
@@ -50,7 +53,8 @@
         b.memberseq, b.nickname
       FROM bbs a, member b
       WHERE a.memberseq = b.memberseq
-        AND b.nickname = #{search}
+      	AND a.bbstag=10
+        AND b.nickname LIKE CONCAT('%', #{search}, '%')
       ORDER BY bbsseq DESC LIMIT #{offset}, #{limit}
     </when>
     <when test="select == 'content'">
@@ -58,6 +62,7 @@
         b.memberseq, b.nickname
       FROM bbs a, member b
       WHERE a.memberseq = b.memberseq
+      	AND a.bbstag=10
         AND a.content LIKE CONCAT('%', #{search}, '%')
       ORDER BY bbsseq DESC LIMIT #{offset}, #{limit}
     </when>
