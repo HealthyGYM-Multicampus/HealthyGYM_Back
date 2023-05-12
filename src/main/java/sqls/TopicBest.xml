@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mul.HealthyGYM.Dao.TopicBestDao">
+
+<!-- 토픽베스트 -->
+<select id="findAllBest" parameterType="com.mul.HealthyGYM.Dto.BbsParam" resultType="map">
+	 select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail,
+			profile, nickname, ifnull(cnt, 0) cmtcount
+	 from member a, 
+	 	 (select row_number()over(order by ${order} desc) rnum,
+				memberseq, bbsseq, bbstag, title, content, wdate, rdate, ref, likecount, readcount, thumnail
+		  from bbs
+		  where bbstag in (2, 3, 4) 
+		  and wdate >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+		  and likecount >= 10
+		  and del=0
+		  order by ${order} desc) b
+	 LEFT OUTER JOIN (select count(*) cnt, bbsseq
+		  from bbs_comment
+		  group by bbsseq) c
+	 on b.bbsseq=c.bbsseq
+	 where a.memberseq=b.memberseq
+	 and rnum between ${start} and ${end}
+</select>
+
+<!-- 검색결과 -->
+<select id="findBbsByKeyword" parameterType="com.mul.HealthyGYM.Dto.BbsParam" resultType="map">
+	select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail,
+			profile, nickname, ifnull(cnt, 0) cmtcount
+	 from member a, 
+	 	 (select row_number() over(order by ${order} desc) rnum,
+				memberseq, bbsseq, bbstag, title, content, wdate, rdate, ref, likecount, readcount, thumnail
+		  from bbs
+		  where 1=1 and del=0
+		    <if test="search != null and search != ''">
+		      and (title like concat('%',#{search},'%') or content like concat('%',#{search},'%'))
+		    </if>
+		    <if test="bbstag != null">
+		      <if test="bbstag == 0">
+		        and 1=1 <!-- 모든 게시글 -->
+		      </if>
+		      <if test="bbstag != 0">
+		        and bbstag = #{bbstag} <!-- bbstag에 맞는 게시글 -->
+		      </if>
+		    </if>
+		  order by ${order} desc) b
+	 LEFT OUTER JOIN (select count(*) cnt, bbsseq
+		  from bbs_comment
+		  group by bbsseq) c
+	 on b.bbsseq=c.bbsseq
+	 where a.memberseq=b.memberseq
+	 <if test="bbstag != null and bbstag != 0">
+	    and bbstag = #{bbstag} <!-- bbstag에 맞는 게시글 -->
+	 </if>
+	 and rnum between ${start} and ${end}
+</select>
+
+</mapper>
