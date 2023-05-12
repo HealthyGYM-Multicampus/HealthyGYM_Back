@@ -20,4 +20,8 @@ public interface HealthDao {
 	int writeBbs(BbsDto dto);
 	int writeMate(MateDto dto);
 	
+	int updateBbs(BbsDto dto);
+	int updateMate(MateDto dto);
+	
+	int readcountUp(int bbsseq);
 }

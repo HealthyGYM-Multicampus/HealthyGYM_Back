@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mul.HealthyGYM.Dto.BbsCommentDto;
+import com.mul.HealthyGYM.Dto.BbsCommentParam;
 import com.mul.HealthyGYM.Dto.BbsDto;
 import com.mul.HealthyGYM.Dto.BbsParam;
 import com.mul.HealthyGYM.Service.FreeBbsService;
@@ -33,18 +34,21 @@ public class FreeBbsController {
 		System.out.println("bbslist " + new Date());
 		
 		int page = param.getPage();
-		param.setStart(1 + (page * 3));
-		param.setEnd((page + 1) * 3);
+		param.setStart(1 + (page * 10));
+		param.setEnd((page + 1) * 10);
 		
 		return service.bbsList(param);
 	}
 	
 	@GetMapping("/freebbsdetail")
-	public List<Map<String, Object>> bbsdetail(BbsDto dto) {
+	public List<Map<String, Object>> bbsdetail(BbsDto dto, boolean visit) {
 		System.out.println("freebbsdetail " + dto.getBbsseq() + " "+ dto.getMemberseq()+" " + new Date());
 		
 		// 게시글 상세 정보
 		List<Map<String, Object>> detail = service.bbsDetail(dto.getBbsseq());
+
+		// 조회수
+		if(visit) service.readcountUp(dto.getBbsseq());
 
 		// 로그인한 유저의 좋아요 여부
 		boolean liking = false;
@@ -57,10 +61,14 @@ public class FreeBbsController {
 	}
 	
 	@GetMapping("/freebbscomment")
-	public List<Map<String, Object>> bbscomment(int bbsseq) {
-		System.out.println("freebbscomment "+ bbsseq + " " + new Date());
+	public List<Map<String, Object>> bbscomment(BbsCommentParam param) {
+		System.out.println("freebbscomment " + new Date());
 		
-		return service.bbsComment(bbsseq);
+		int page = param.getPage();
+		param.setStart(1 + (page * 10));
+		param.setEnd((page + 1) * 10);
+		
+		return service.bbsComment(param);
 	}
 	
 	
@@ -136,6 +144,28 @@ public class FreeBbsController {
 		System.out.println("updatefreebbs  " + new Date());
 		
 		if(service.updateBbs(dto)) {
+			return "OK";
+		} else {
+			return "NO";
+		}
+	}
+	
+	@PostMapping("/updatebbscomment")
+	public String updatebbscomment(BbsCommentDto dto) {
+		System.out.println("updatebbscomment  " + new Date());
+		System.out.println(dto.toString());
+		
+		if(service.updateBbsComment(dto)) {
+			return "OK";
+		} else {
+			return "NO";
+		}
+	}
+	@PostMapping("/deletebbscomment")
+	public String deletebbscomment(int commentseq) {
+		System.out.println("deletebbscomment  " + new Date());
+		
+		if(service.deleteBbsComment(commentseq)) {
 			return "OK";
 		} else {
 			return "NO";

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mul.HealthyGYM.Dao.FreeBbsDao;
 import com.mul.HealthyGYM.Dto.BbsCommentDto;
+import com.mul.HealthyGYM.Dto.BbsCommentParam;
 import com.mul.HealthyGYM.Dto.BbsDto;
 import com.mul.HealthyGYM.Dto.BbsParam;
 
@@ -31,8 +32,8 @@ public class FreeBbsService {
 		return dao.checkLiking(dto) > 0;
 	}
 	
-	public List<Map<String, Object>> bbsComment(int bbsseq) {
-		return dao.bbsComment(bbsseq);
+	public List<Map<String, Object>> bbsComment(BbsCommentParam param) {
+		return dao.bbsComment(param);
 	}
 	
 	public boolean writeBbs(BbsDto dto) {
@@ -69,5 +70,17 @@ public class FreeBbsService {
 	
 	public boolean updateBbs(BbsDto dto) {
 		return dao.updateBbs(dto) > 0;
+	}
+	
+	public boolean updateBbsComment(BbsCommentDto dto) {
+		return dao.updateBbsComment(dto) > 0;
+	}
+	
+	public boolean deleteBbsComment(int commentseq) {
+		return dao.deleteBbsComment(commentseq) > 0;
+	}
+	
+	public boolean readcountUp(int bbsseq) {
+		return dao.readcountUp(bbsseq) > 0;
 	}
 }
