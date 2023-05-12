@@ -5,10 +5,10 @@
 <mapper namespace="com.mul.HealthyGYM.Dao.FreeBbsDao">
 	
 	<select id="bbsList" parameterType="com.mul.HealthyGYM.Dto.BbsParam" resultType="map">
-		select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail,
+		select b.bbsseq, title, wdate, rdate, ref, likecount, readcount, thumnail,
 			nickname, ifnull(cnt, 0) cmtcount
 		from member a, (select row_number()over(order by ${order} desc) rnum,
-			memberseq, bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail
+			memberseq, bbsseq, title, wdate, rdate, ref, likecount, readcount, thumnail
 			from bbs
 			where bbstag=#{bbstag} and del=0
 			order by ${order} desc) b
@@ -34,13 +34,16 @@
 			where memberseq=#{memberseq} and bbsseq=#{bbsseq}) as liking
 	</select>
 	
-	<select id="bbsComment" parameterType="Integer" resultType="map">
+	<select id="bbsComment" parameterType="com.mul.HealthyGYM.Dto.BbsCommentParam" resultType="map">
 		select bbsseq, commentseq, cmtcontent, regdate, step, ref, cmtdel,
-			b.memberseq, b.nickname, b.profile
-		from bbs_comment a, member b
+			a.memberseq, a.nickname, a.profile
+		from member a, (select row_number()over(order by ref desc, step) rnum,
+			memberseq, bbsseq, commentseq, cmtcontent, regdate, step, ref, cmtdel
+			from bbs_comment
+			where bbsseq=#{bbsseq}
+			order by ref desc, step) b
 		where a.memberseq=b.memberseq
-			and bbsseq=#{bbsseq}
-		order by ref desc, step
+			and rnum between ${start} and ${end}
 	</select>
 	
 	<insert id="writeBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
@@ -86,13 +89,31 @@
 	
 	<update id="deleteBbs" parameterType="Integer">
 		update bbs
-		set del=#{1}
+		set del=1
 		where bbsseq=#{bbsseq}
 	</update>
 	
 	<update id="updateBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
 		update bbs
-		set title=#{title}, content=#{content}, thumnail=#{thumnail}, rdate=now()
+		set title=#{title}, content=#{content}, thumnail=#{thumnail}, bbstag=#{bbstag}, rdate=now()
+		where bbsseq=#{bbsseq}
+	</update>
+	
+	<update id="updateBbsComment" parameterType="com.mul.HealthyGYM.Dto.BbsCommentDto">
+		update bbs_comment
+		set cmtcontent=#{cmtcontent}
+		where commentseq=#{commentseq}
+	</update>
+	
+	<update id="deleteBbsComment" parameterType="Integer">
+		update bbs_comment
+		set cmtdel=1
+		where commentseq=#{commentseq}
+	</update>
+	
+	<update id="readcountUp" parameterType="Integer">
+		update bbs
+		set readcount=readcount+1
 		where bbsseq=#{bbsseq}
 	</update>
 </mapper>

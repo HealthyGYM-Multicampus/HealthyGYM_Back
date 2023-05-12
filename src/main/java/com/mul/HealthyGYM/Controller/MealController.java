@@ -3,6 +3,7 @@ package com.mul.HealthyGYM.Controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +46,7 @@ public class MealController {
 	}
 	
 	@GetMapping(value = "FindMealList")
-	public List<FoodDto> FindMealList(String search, int pageNo) throws IOException{
+	public Map<String, Object> FindMealList(String search, int pageNo) throws IOException{
 		
 		// System.out.println(search);
 		// System.out.println(pageNo);
@@ -91,9 +92,14 @@ public class MealController {
         JSONObject jsonObject = new JSONObject(jsonString);
         JSONObject body = jsonObject.getJSONObject("body");
         
+        int totalCount = body.getInt("totalCount");
+        
+        Map<String, Object> result = new HashMap<>();
+        
         
         if(body.has("items")) {
         	JSONArray items = body.getJSONArray("items");
+        	
             for(int i=0; i<items.length(); i++) {
                 JSONObject item = items.getJSONObject(i);
                 FoodDto dto = new FoodDto();
@@ -114,16 +120,16 @@ public class MealController {
             }
         }
         else {
-        	return FoodDtoList;
+        	result.put("foodDtoList", FoodDtoList);
+        	result.put("totalCount", totalCount);
+        	return result;
         }
         
 
         
-//        for (FoodDto foodDto : FoodDtoList) {
-//			System.out.println(foodDto);
-//		}
-        
-        return FoodDtoList;
+        result.put("foodDtoList", FoodDtoList);
+    	result.put("totalCount", totalCount);
+    	return result;
 	}
 	
 	@PostMapping(value = "/writemeal1")

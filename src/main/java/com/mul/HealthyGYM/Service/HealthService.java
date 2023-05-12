@@ -26,10 +26,21 @@ public class HealthService {
 		return dao.getDetail(bbsseq);
 	}
 	
-	public boolean writeMatebbs(BbsDto bbsdto, MateDto matedto) {
+	public boolean writeMateBbs(BbsDto bbsdto, MateDto matedto) {
 		boolean b = dao.writeBbs(bbsdto) > 0;
 		matedto.setBbsseq(bbsdto.getBbsseq());
 		
 		return b & dao.writeMate(matedto) > 0;
+	}
+	
+	public boolean updateMateBbs(BbsDto bbsdto, MateDto matedto) {
+		boolean b = dao.updateBbs(bbsdto) > 0;
+		matedto.setBbsseq(bbsdto.getBbsseq());
+
+		return b & dao.updateMate(matedto) > 0;
+	}
+	
+	public boolean readcountUp(int bbsseq) {
+		return dao.readcountUp(bbsseq) > 0;
 	}
 }
