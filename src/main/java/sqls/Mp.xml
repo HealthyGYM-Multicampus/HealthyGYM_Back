@@ -52,10 +52,10 @@
 		values (#{inbodyseq}, #{memberseq}, now(), #{weight}, #{musclemass}, #{bodyfatmass}, #{imgpath})
 	</insert>
 
-	<select id="inbodyList" parameterType="Integer"
+	<select id="bodycomList" parameterType="Integer"
 			resultType="com.mul.HealthyGYM.Dto.InbodyDto">
 		select *
-		from inbody
+		from bodycom
 		where memberseq = #{memberseq}
 	</select>
 
@@ -64,5 +64,82 @@
 		SET foltarget = #{newname}
 		WHERE foltarget = #{beforename}
 	</update>
+
+	<insert id="bodyComSave" parameterType="com.mul.HealthyGYM.Dto.InbodyDto">
+		insert into bodycom(memberseq, uploaddate, weight, musclemass, bodyfatmass, imgpath)
+		values (#{memberseq}, now(), #{weight}, #{musclemass}, #{bodyfatmass}, #{imgpath})
+	</insert>
+
+	<select id="myBbsList" parameterType="com.mul.HealthyGYM.Dto.UserBbsParam" resultType="map">
+		SELECT b.bbsseq, bbstag, title, content, wdate, rdate, ref, likecount, readcount, thumnail,
+			   nickname, COALESCE(cnt, 0) AS cmtcount
+		FROM bbs b
+				 JOIN member a ON a.memberseq = b.memberseq
+				 LEFT JOIN (
+			SELECT bbsseq, COUNT(*) AS cnt
+			FROM bbs_comment
+			GROUP BY bbsseq
+		) c ON b.bbsseq = c.bbsseq
+		WHERE b.bbstag = #{bbstag} AND b.del = 0 AND b.memberseq = ${memberseq}
+		ORDER BY wdate DESC;
+	</select>
+
+	<select id="myAllBbsList" parameterType="com.mul.HealthyGYM.Dto.UserBbsParam" resultType="map">
+		SELECT b.bbsseq, bbstag, title, content, wdate, rdate, ref, likecount, readcount, thumnail,
+			   nickname, COALESCE(cnt, 0) AS cmtcount
+		FROM bbs b
+				 JOIN member a ON a.memberseq = b.memberseq
+				 LEFT JOIN (
+			SELECT bbsseq, COUNT(*) AS cnt
+			FROM bbs_comment
+			GROUP BY bbsseq
+		) c ON b.bbsseq = c.bbsseq
+		WHERE b.del = 0 AND b.memberseq = ${memberseq}
+		ORDER BY wdate DESC;
+	</select>
+
+	<select id="myCmtBbsList" parameterType="com.mul.HealthyGYM.Dto.UserBbsParam" resultType="map">
+		select b.bbsseq, title, content, profile, nickname, wdate, likecount, readcount, bbstag, a.ref, coalesce(cnt, 0) as cmtcount
+		from bbs_comment b
+				 join bbs a on a.bbsseq=b.bbsseq
+				 left join ( select bbsseq, count(*) as cnt
+							 from bbs_comment group by bbsseq ) c on a.bbsseq = c.bbsseq
+				 left join member d on a.memberseq=d.memberseq
+		where bbstag = #{bbstag} and del = 0 and b.memberseq = #{memberseq}
+		group by b.bbsseq;
+	</select>
+
+	<select id="myAllCmtBbsList" parameterType="com.mul.HealthyGYM.Dto.UserBbsParam" resultType="map">
+		select b.bbsseq, title, content, profile, nickname, wdate, likecount, readcount, bbstag, a.ref, coalesce(cnt, 0) as cmtcount
+		from bbs_comment b
+				 join bbs a on a.bbsseq=b.bbsseq
+				 left join ( select bbsseq, count(*) as cnt
+							 from bbs_comment group by bbsseq ) c on a.bbsseq = c.bbsseq
+				 left join member d on a.memberseq=d.memberseq
+		where del = 0 and b.memberseq = #{memberseq}
+		group by b.bbsseq;
+	</select>
+
+	<select id="myLikeBbsList" parameterType="com.mul.HealthyGYM.Dto.UserBbsParam" resultType="map">
+		select b.bbsseq, title, content, profile, nickname, wdate, likecount, readcount, bbstag, a.ref, coalesce(cnt, 0) as cmtcount
+		from like_bbs b
+				 join bbs a on a.bbsseq=b.bbsseq
+				 left join ( select bbsseq, count(*) as cnt
+							 from bbs_comment group by bbsseq ) c on a.bbsseq = c.bbsseq
+				 left join member d on a.memberseq=d.memberseq
+		where bbstag = #{bbstag} and del = 0 and b.memberseq = #{memberseq}
+		group by b.bbsseq;
+	</select>
+
+	<select id="myAllLikeBbsList" parameterType="com.mul.HealthyGYM.Dto.UserBbsParam" resultType="map">
+		select b.bbsseq, title, content, profile, nickname, wdate, likecount, readcount, bbstag, a.ref, coalesce(cnt, 0) as cmtcount
+		from like_bbs b
+				 join bbs a on a.bbsseq=b.bbsseq
+				 left join ( select bbsseq, count(*) as cnt
+							 from bbs_comment group by bbsseq ) c on a.bbsseq = c.bbsseq
+				 left join member d on a.memberseq=d.memberseq
+		where del = 0 and b.memberseq = #{memberseq}
+		group by b.bbsseq;
+	</select>
 
 </mapper>
