@@ -24,43 +24,73 @@ public class BodyGalleryService {
 		return dao.findAllBody(param);
 	}
 	
-	public boolean saveBody(BbsDto dto) {
-		int count = dao.saveBody(dto);
-		return count>0?true:false;
+	public void saveBody(BbsDto dto) {
+		dao.saveBody(dto);
 	}
 	
-	public boolean updateBody(BbsDto dto) {
-		int count = dao.updateBody(dto);
-		return count>0?true:false;
+	public void updateBody(BbsDto dto) {
+		dao.updateBody(dto);
 	}
 	
-	public boolean deleteBodyById(int bbsseq) {
-		int count = dao.deleteBodyById(bbsseq);
-		return count>0?true:false;
+	public void deleteBodyById(int bbsseq) {
+		dao.deleteBodyById(bbsseq);
 	}
 	
 	public Map<String, Object> findBodyById(int bbsseq) {
 		return dao.findBodyById(bbsseq);
 	}
 	
-	public boolean updateBodyReadcount(int bbsseq) {
-		int count = dao.updateBodyReadcount(bbsseq);
-		return count>0?true:false;
+	public void updateBodyReadcount(int bbsseq) {
+		dao.updateBodyReadcount(bbsseq);
 	}
 	
-	public void insertBodyLike(LikeDto like) {
-		dao.saveBodyLike(like);
-		dao.updateBodyLikecount(like.getBbsseq());
+	public int findBodyLike(LikeDto likeDto) {
+		return dao.findBodyLike(likeDto);
 	}
-	
-	public void deleteBodyLike(LikeDto like) {
-		dao.deleteBodyLike(like);
-		dao.updateBodyLikecount(like.getBbsseq());
-	}
-	
-	public int getBodyLike(LikeDto like) {
-		return dao.findBodyLike(like);
-	}
-	
 
+	public void saveBodyLike(LikeDto likeDto) {
+		dao.saveBodyLike(likeDto);
+		dao.updateBodyLikecount(likeDto.getBbsseq());
+	}
+	
+	public void deleteBodyLike(LikeDto likeDto) {
+		dao.deleteBodyLike(likeDto);
+		dao.updateBodyLikecount(likeDto.getBbsseq());
+	}
+	
+	public void updateBodyReport(int bbsseq) {
+		dao.updateBodyReport(bbsseq);
+	}
+	
+	public void saveBodyComment(Map<String, Object> commentMap) {
+		dao.saveBodyComment(commentMap);
+	}
+	
+	public void saveBodyReply(Map<String, Object> replyMap) {
+		dao.saveBodyReply(replyMap);
+	}
+	
+	public List<Map<String, Object>> findAllBodyComment(int bbsseq) {
+		return dao.findAllBodyComment(bbsseq);
+	}
+	
+	public void updateBodyComment(BbsCommentDto bbsCommentDto) {
+		dao.updateBodyComment(bbsCommentDto);
+	}
+	
+	public void deleteCommentWithoutReply(int commentseq) {
+		dao.deleteCommentWithoutReply(commentseq);
+	}
+	
+	public void updateComment(Map<String, Object> commentMap) {
+		dao.updateComment(commentMap);
+	}
+	
+	public void updateReply(Map<String, Object> replyMap) {
+		dao.updateReply(replyMap);
+	}
+	
+	public void deleteAllReplies(int commentseq) {
+		dao.deleteAllReplies(commentseq);
+	}
 }

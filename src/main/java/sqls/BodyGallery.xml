@@ -8,7 +8,7 @@
  	 map의 value는 반환되는 row의 key에 해당하는 컬럼의 값이 할당된다. -->
 <!-- 바디갤러리 전체 게시글 조회(게시글 목록) 기본:최신순 -->
 <select id="findAllBody" parameterType="com.mul.HealthyGYM.Dto.BbsParam" resultType="map">
-	select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail,
+	select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail, bbstag,
 			profile, nickname, ifnull(cnt, 0) cmtcount
 	 from member a, 
 	 	 (select row_number()over(order by ${order} desc) rnum,
@@ -45,7 +45,7 @@
 
 <!-- 바디갤러리 상세 게시글 조회 -->
 <select id="findBodyById" parameterType="Integer" resultType="map">
-	select b.bbsseq, b.memberseq, b.title, b.content, b.rdate, b.likecount, b.readcount, m.nickname, m.profile
+	select b.bbsseq, b.memberseq, b.title, b.content, b.wdate, b.rdate, b.likecount, b.readcount, m.nickname, m.profile
 	from bbs as b
 	join member as m
 	on b.memberseq=m.memberseq
@@ -105,7 +105,7 @@
 </insert>	
 
 <!-- 댓글 리스트 조회 -->
-<select id="findAllBodyComment" resultType="map">
+<select id="findAllBodyComment" parameterType="Integer" resultType="map">
 	select c.commentseq, c.memberseq, c.bbsseq, c.cmtcontent, c.regdate, c.step, c.ref, m.nickname, m.profile
 	from bbs_comment as c
 	join member as m
@@ -132,7 +132,7 @@
 </update>
 
 <!-- 댓글 삭제 시 대댓글이 없는 경우 댓글 삭제 -->
-<delete id="deleteCommentWithoutReply">
+<delete id="deleteCommentWithoutReply" parameterType="Integer">
   DELETE FROM bbs_comment 
   WHERE commentseq = #{commentseq}
 </delete>
@@ -147,7 +147,7 @@
 </update>
 
 <!-- 대댓글 삭제 시 모든 대댓글이 삭제된 경우 댓글과 대댓글 일괄 삭제 -->
-<delete id="deleteAllReplies">
+<delete id="deleteAllReplies" parameterType="Integer">
   DELETE FROM bbs_comment 
   WHERE ref = (SELECT ref FROM bbs_comment WHERE commentseq = #{commentseq})
 </delete>

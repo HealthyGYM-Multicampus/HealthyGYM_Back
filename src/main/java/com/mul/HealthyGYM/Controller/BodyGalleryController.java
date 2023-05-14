@@ -1,19 +1,26 @@
 package com.mul.HealthyGYM.Controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mul.HealthyGYM.Dto.BbsCommentDto;
 import com.mul.HealthyGYM.Dto.BbsDto;
 import com.mul.HealthyGYM.Dto.BbsParam;
+import com.mul.HealthyGYM.Dto.LikeDto;
 import com.mul.HealthyGYM.Service.BodyGalleryService;
 
 @RestController
+@RequestMapping("/BodyGallery")
 public class BodyGalleryController {
 	
 	@Autowired
@@ -32,45 +39,66 @@ public class BodyGalleryController {
 		return service.findAllBody(param);
 	}
 	
-	// 게시글 등록
 	@PostMapping(value = "/saveBody")
-	public String saveBody(BbsDto dto) {
-		System.out.println("saveBody 실행");
-		boolean b = service.saveBody(dto);
-		if(b) {
-			return "OK";
-		}
-		return "NO";
+	public ResponseEntity<String> saveBody(@RequestBody BbsDto dto) {
+		System.out.println("saveBody 게시글 저장");
+		service.saveBody(dto);
+		return ResponseEntity.ok("Successfully saved");
 	}
-	
-	// 게시글 수정
+
 	@PostMapping(value = "/updateBody")
-	public String updateBody(int bbsseq, BbsDto dto) {
-		System.out.println("updateBody 실행");
-		boolean b = service.updateBody(dto);
-		if(b) {
-			return "OK";
-		}
-		return "NO";
+	public ResponseEntity<String> updateBody(@RequestBody BbsDto dto) {
+		System.out.println("updateBody 게시글 수정");
+		service.updateBody(dto);
+		return ResponseEntity.ok("Successfully updated");
+	}
+
+	@PostMapping(value = "/deleteBodyById/{bbsseq}")
+	public ResponseEntity<String> deleteBodyById(@PathVariable Integer bbsseq) {
+		System.out.println("deleteBodyById 게시글 삭제");
+		service.deleteBodyById(bbsseq);
+		return ResponseEntity.ok("Successfully deleted");
 	}
 	
-	// 게시글 삭제
-	@GetMapping(value = "/deleteBody")
-	public String deleteBody(int bbsseq) {
-		System.out.println("deleteBody 실행");
-		boolean b = service.deleteBodyById(bbsseq);
-		if(b) {
-			return "OK";
-		}
-		return "NO";
+	@GetMapping(value = "/findBodyById/{bbsseq}")
+	public Map<String, Object> findBodyById(@PathVariable Integer bbsseq) {
+        System.out.println("findBodyById 상세 게시글 조회");
+        service.updateBodyReadcount(bbsseq);
+        return service.findBodyById(bbsseq);
+	}
+
+	@GetMapping(value = "/findBodyLike/{bbsseq}")
+	public int findBodyLike(@RequestParam(name = "memberseq") Integer memberseq, @PathVariable Integer bbsseq) {
+		System.out.println("findBodyLike 좋아요 확인");
+		LikeDto likeDto = new LikeDto();
+		likeDto.setMemberseq(memberseq);
+		likeDto.setBbsseq(bbsseq);
+		return service.findBodyLike(likeDto);
+	}
+
+	@PostMapping(value = "/saveBodyLike/{bbsseq}")
+	public ResponseEntity<String> saveBodyLike(@RequestBody LikeDto likeDto) {
+		System.out.println("saveBodyLike 좋아요 등록");
+		service.saveBodyLike(likeDto);
+		return ResponseEntity.ok("Successfully saved");
+	}
+
+	@PostMapping(value = "/deleteBodyLike/{bbsseq}")
+	public ResponseEntity<String> deleteBodyLike(@RequestParam(name = "memberseq") Integer memberseq, @PathVariable Integer bbsseq) {
+	    System.out.println("deleteBodyLike 좋아요 삭제");
+	    LikeDto likeDto = new LikeDto();
+	    likeDto.setMemberseq(memberseq);
+	    likeDto.setBbsseq(bbsseq);
+	    service.deleteBodyLike(likeDto);
+	    return ResponseEntity.ok("Successfully deleted");
+	}
+
+	@PostMapping(value = "/updateBodyReport/{bbsseq}")
+	public ResponseEntity<String> updateBodyReport(@PathVariable Integer bbsseq) {
+		System.out.println("updateBodyReport 게시글 신고");
+		service.updateBodyReport(bbsseq);
+		return ResponseEntity.ok("Successfully updated");
 	}
 	
-	// 상세 게시글 조회 : 조회수 증가되는 지 확인 필요
-	@GetMapping(value = "/findBodyById")
-	public Map<String, Object> findBodyById(int bbsseq) {
-		System.out.println("findBodyById 실행");
-		service.updateBodyReadcount(bbsseq);
-		return service.findBodyById(bbsseq);
-	}
 	
 }
