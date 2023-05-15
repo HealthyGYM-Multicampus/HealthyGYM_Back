@@ -68,6 +68,10 @@ public class FreeBbsService {
 		return dao.deleteBbs(bbsseq) > 0;
 	}
 	
+	public boolean reportBbs(int bbsseq) {
+		return dao.reportBbs(bbsseq) > 0;
+	}
+	
 	public boolean updateBbs(BbsDto dto) {
 		return dao.updateBbs(dto) > 0;
 	}

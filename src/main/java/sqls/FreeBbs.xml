@@ -93,6 +93,12 @@
 		where bbsseq=#{bbsseq}
 	</update>
 	
+	<update id="reportBbs" parameterType="Integer">
+		update bbs
+		set report=1
+		where bbsseq=#{bbsseq}
+	</update>
+	
 	<update id="updateBbs" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
 		update bbs
 		set title=#{title}, content=#{content}, thumnail=#{thumnail}, bbstag=#{bbstag}, rdate=now()
