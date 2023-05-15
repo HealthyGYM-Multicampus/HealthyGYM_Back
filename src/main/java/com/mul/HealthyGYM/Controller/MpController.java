@@ -56,7 +56,8 @@ public class MpController {
     public String profileUpdate(@ModelAttribute ProfileDto profileDto) throws IOException {
         System.out.println("profileUpdate " + new Date());
         service.profileUpdate(profileDto);
-        return "ok";
+        String profile = service.findMemberById(profileDto.getMemberseq()).getProfile();
+        return profile;
     }
 
     // Multipart file이 null일 경우 프로필이미지를 제외한 나머지 회원정보 업데이트
@@ -65,7 +66,8 @@ public class MpController {
     public String profileUpdateNull(@RequestBody ProfileDto profileDto) throws IOException {
         System.out.println("profileUpdateNull " + new Date());
         service.profileUpdate(profileDto);
-        return "ok";
+        String profile = service.findMemberById(profileDto.getMemberseq()).getProfile();
+        return profile;
     }
 
     @PostMapping(value = "/members/follow")
@@ -229,6 +231,34 @@ public class MpController {
         System.out.println(inbodyDto.toString());
 
         service.bodyComSave(inbodyDto);
+
+        return "ok";
+    }
+
+    @PostMapping(value = "/bodycomdelete")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public String bodyComDelete(@RequestBody InbodyDto inbodyDto) {
+        System.out.println("bodyComDelete " + new Date());
+        int bodycomseq = inbodyDto.getBodycomseq();
+
+        service.bodyComDelete(bodycomseq);
+
+        return "ok";
+    }
+
+    @PostMapping(value = "/memberdelete")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public String memberDelete(@RequestBody MemberDto memberDto) {
+        System.out.println("memberDelete " + new Date());
+        int memberseq = memberDto.getMemberseq();
+
+        MemberDto dto = service.findMemberById(memberseq);
+
+        String ranEmail = UUID.randomUUID() + "@healthygym.com";
+        dto.setEmail(ranEmail);
+        dto.setAuth(2);
+
+        service.memberDelete(dto);
 
         return "ok";
     }

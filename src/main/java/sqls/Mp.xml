@@ -33,17 +33,19 @@
 	</update>
 
 	<select id="followingMembers" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.FollowDto">
-		SELECT m.memberseq, f.foltarget, m.profile
+		SELECT m.memberseq, f.foltarget, m.profile, f.memberseq, m2.mbti, m2.gender
 		FROM follow f
 				 JOIN member m ON m.nickname = f.foltarget
+				 join memberinfo m2 on m.memberseq = m2.memberseq
 		WHERE f.memberseq = #{memberseq}
 	</select>
 
 	<select id="followerMembers" parameterType="Integer"
 			resultType="com.mul.HealthyGYM.Dto.FollowDto">
-		SELECT f.memberseq, m.nickname as foltarget, m.profile
+		SELECT f.memberseq, m.nickname as foltarget, m.profile, m2.mbti, m2.gender
 		FROM follow f
 				 JOIN member m ON m.memberseq = f.memberseq
+				 join memberinfo m2 on m.memberseq = m2.memberseq
 		WHERE f.foltarget = (SELECT nickname FROM member WHERE memberseq = #{memberseq});
 	</select>
 
@@ -141,5 +143,16 @@
 		where del = 0 and b.memberseq = #{memberseq}
 		group by b.bbsseq;
 	</select>
+
+	<delete id="bodyComDelete" parameterType="Integer">
+		DELETE FROM bodycom
+		WHERE bodycomseq = #{bodycomseq}
+	</delete>
+
+	<update id="memberDelete" parameterType="com.mul.HealthyGYM.Dto.MemberDto">
+		UPDATE member
+		SET auth = #{auth}, email = #{email}
+		WHERE memberseq = #{memberseq}
+	</update>
 
 </mapper>
