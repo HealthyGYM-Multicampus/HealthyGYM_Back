@@ -253,4 +253,12 @@ public class MpService {
     public List<Map<String, Object>> myAllLikeBbsList(UserBbsParam userBbsParam) {
         return dao.myAllLikeBbsList(userBbsParam);
     }
+
+    public void bodyComDelete(int bodycomseq) {
+       dao.bodyComDelete(bodycomseq);
+    }
+
+    public void memberDelete(MemberDto memberDto) {
+        dao.memberDelete(memberDto);
+    }
 }
