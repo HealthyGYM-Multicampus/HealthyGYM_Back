@@ -7,32 +7,36 @@ public class BbsFoodDto {
 	FoodDto[] Fooddto;
 	boolean islike;	// 현재 로그인한 사람이 좋아요를 누른 게시물인지 파악하기 위한 초기 렌더링용
 	int commentcnt; // 게시물당 코멘트의 개수를 파악하기 위한 용도
+	String profile; // 글 작성자의 프로필 이미지 경로
 	
 	
 	public BbsFoodDto() {
 		super();
 	}
+	
 	public BbsFoodDto(BbsDto bbsdto, FoodDto[] fooddto) {
 		super();
 		Bbsdto = bbsdto;
 		Fooddto = fooddto;
 	}
+
+	public BbsFoodDto(BbsDto bbsdto, FoodDto[] fooddto, boolean islike, int commentcnt, String profile) {
+	super();
+	Bbsdto = bbsdto;
+	Fooddto = fooddto;
+	this.islike = islike;
+	this.commentcnt = commentcnt;
+	this.profile = profile;
+}
 	
-//	public BbsFoodDto(BbsDto bbsdto, FoodDto[] fooddto, boolean islike) {
-//		super();
-//		Bbsdto = bbsdto;
-//		Fooddto = fooddto;
-//		this.islike = islike;
-//	}
 	
-	public BbsFoodDto(BbsDto bbsdto, FoodDto[] fooddto, boolean islike, int commentcnt) {
-		super();
-		Bbsdto = bbsdto;
-		Fooddto = fooddto;
-		this.islike = islike;
-		this.commentcnt = commentcnt;
+	
+	public String getProfile() {
+		return profile;
 	}
-	
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
 	public int getCommentcnt() {
 		return commentcnt;
 	}
