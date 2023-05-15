@@ -139,6 +139,17 @@ public class FreeBbsController {
 		}
 	}
 	
+	@PostMapping("/reportbbs")
+	public String reportbbs(int bbsseq) {
+		System.out.println("reportbbs  " + new Date());
+		
+		if(service.reportBbs(bbsseq)) {
+			return "OK";
+		} else {
+			return "NO";
+		}
+	}
+	
 	@PostMapping("/updatefreebbs")
 	public String updatebbs(BbsDto dto) {
 		System.out.println("updatefreebbs  " + new Date());

@@ -30,6 +30,7 @@ public interface FreeBbsDao {
 	int likecountDown(int bbsseq);
 	
 	int deleteBbs(int bbsseq);
+	int reportBbs(int bbsseq);
 	int updateBbs(BbsDto dto);
 	int updateBbsComment(BbsCommentDto dto);
 	int deleteBbsComment(int commentseq);
