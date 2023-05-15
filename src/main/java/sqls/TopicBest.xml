@@ -6,7 +6,7 @@
 
 <!-- 토픽베스트 -->
 <select id="findAllBest" parameterType="com.mul.HealthyGYM.Dto.BbsParam" resultType="map">
-	 select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail,
+	 select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail, bbstag,
 			profile, nickname, ifnull(cnt, 0) cmtcount
 	 from member a, 
 	 	 (select row_number()over(order by ${order} desc) rnum,
@@ -27,7 +27,7 @@
 
 <!-- 검색결과 -->
 <select id="findBbsByKeyword" parameterType="com.mul.HealthyGYM.Dto.BbsParam" resultType="map">
-	select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail,
+	select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail, bbstag,
 			profile, nickname, ifnull(cnt, 0) cmtcount
 	 from member a, 
 	 	 (select row_number() over(order by ${order} desc) rnum,
