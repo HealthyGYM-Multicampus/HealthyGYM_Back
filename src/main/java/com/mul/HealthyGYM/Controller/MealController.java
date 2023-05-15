@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -261,11 +262,70 @@ public class MealController {
 	
 	
 	@GetMapping("/getmealcomments")
-	public List<MealCommentMemberDto> getmealcomments(int bbsseq, int memberseq) {
+	public List<MealCommentMemberDto> getmealcomments(int bbsseq) {
 		// 현재 BbsCommentDto를 반환중. 이미지와 같이 반환하도록 나중에 수정해야함.
 		
-		return mealservice.getmealcomments(bbsseq, memberseq);
+		return mealservice.getmealcomments(bbsseq);
 	}
+	
+	@GetMapping("/getnickname")
+	public String getnickname(int memberseq) {
+		
+		return mealservice.getnickname(memberseq);
+	}
+	
+	@PostMapping("/mealupdate")
+	public Map<String, Object> mealupdate(@RequestBody Map<String, Object> requestBody) {
+	    int bbsseq = (Integer) requestBody.get("bbsseq");
+	   
+	    
+	    return mealservice.mealupdate(bbsseq);
+	}
+	
+	@PostMapping("/updatemeal1")
+	public int updatemeal1(BbsDto bbsdto) {
+		
+		return mealservice.updatemeal1(bbsdto);
+	}
+	
+	@PostMapping(value = "/updatemeal2", consumes = "application/json")
+	public String updatemeal2(@RequestBody String selectedItemsJson, int bbsseq) throws IOException {
+		
+		
+		System.out.println("updatemeal2 " + new Date());
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+        List<FoodDto> foodDtoList = objectMapper.readValue(selectedItemsJson, objectMapper.getTypeFactory().constructCollectionType(List.class, FoodDto.class));
+        System.out.println("updatemeal2 : " + foodDtoList.toString());
+        
+        if(mealservice.updatemeal2(foodDtoList, bbsseq)) {
+        	return "OK";
+        } else {
+        	return "FALSE";
+        }
+	}
+	
+	@PostMapping("/deletemealcomment")
+	public String deletemealcomment(@RequestBody Map<String, Object> requestBody) {
+		int commentseq = (Integer) requestBody.get("commentseq");
+	  
+
+	    System.out.println(commentseq);
+	    if(mealservice.deletemealcomment(commentseq)) {
+	      return "OK";
+	    } else {
+	      return "FALSE";
+	    }
+	  
+	}
+
+
+
+		
+		
+		
+	
+
 	
 
 
