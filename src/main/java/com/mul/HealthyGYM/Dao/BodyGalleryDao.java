@@ -19,43 +19,57 @@ public interface BodyGalleryDao {
 	List<Map<String, Object>> findAllBody(BbsParam param);
 	
 	// 게시글 작성
-	int saveBody(BbsDto dto);
+	void saveBody(BbsDto dto);
 	
 	// 게시글 수정
-	int updateBody(BbsDto dto);
+	void updateBody(BbsDto dto);
 	
 	// 게시글 삭제
-	int deleteBodyById(int bbsseq);
+	void deleteBodyById(int bbsseq);
 	
 	// 상세 게시글 조회
 	Map<String, Object> findBodyById(int bbsseq);
 	
-	// 조회수
-	int updateBodyReadcount(int bbsseq);
+	// 조회수 증가
+	void updateBodyReadcount(int bbsseq);
 	
-	// 신고
-	void updateBodyReport(int bbsseq);
-	
-	// 좋아요
-	int findBodyLike(LikeDto like);
-	void saveBodyLike(LikeDto like);
-	void deleteBodyLike(LikeDto like);
-	void updateBodyLikecount(int bbsseq);
-	
-	// 대댓글 확인 필요 -> 에러 가능성 있음
-	// dao에만 작성하고 댓글 확인 후 service까지 구현해보기
-	// 댓글 작성
-	int saveBodyComment(BbsCommentDto cmt);
-	
-	// 대댓글 작성
-	int saveBodyReply(BbsCommentDto cmt);
-	
-	// 댓글 리스트 조회
-	List<Map<String, Object>> findAllBodyComment();
-	
-	// 댓글 수정
-	int updateBodyComment(BbsCommentDto cmt);
-	
-	// 댓글 삭제 시 대댓글이 있는 경우 댓글 수정
+	// 좋아요 확인
+    int findBodyLike(LikeDto likeDto);
+    
+    // 좋아요 추가
+    void saveBodyLike(LikeDto likeDto);
+    
+    // 좋아요 취소
+    void deleteBodyLike(LikeDto likeDto);
+    
+    // 좋아요 갯수 업데이트
+    void updateBodyLikecount(int bbsseq);
+    
+    // 신고 기능
+    void updateBodyReport(int bbsseq);
+    
+    // 댓글 작성
+    void saveBodyComment(Map<String, Object> commentMap);
+    
+    // 대댓글 작성
+    void saveBodyReply(Map<String, Object> replyMap);
+    
+    // 댓글 조회
+    List<Map<String, Object>> findAllBodyComment(int bbsseq);
+    
+    // 댓글 수정
+    void updateBodyComment(BbsCommentDto bbsCommentDto);
+    
+    // 대댓글 있는 경우 댓글 삭제
+    void updateComment(Map<String, Object> commentMap);
+    
+    // 대댓글이 없는 경우 댓글 삭제
+    void deleteCommentWithoutReply(int commentseq);
+    
+    // 댓글이 있는 경우 대댓글 삭제
+    void updateReply(Map<String, Object> replyMap);
+    
+    // 댓글, 대댓글 일괄 삭제
+    void deleteAllReplies(int commentseq);
 	
 }
