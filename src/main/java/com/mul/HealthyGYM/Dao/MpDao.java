@@ -42,4 +42,7 @@ public interface MpDao {
 
     List<Map<String, Object>> myAllLikeBbsList(UserBbsParam userBbsParam);
 
+    void bodyComDelete(int bodycomseq);
+
+    void memberDelete(MemberDto memberDto);
 }
