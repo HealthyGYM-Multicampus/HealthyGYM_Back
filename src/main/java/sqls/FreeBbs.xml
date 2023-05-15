@@ -5,10 +5,10 @@
 <mapper namespace="com.mul.HealthyGYM.Dao.FreeBbsDao">
 	
 	<select id="bbsList" parameterType="com.mul.HealthyGYM.Dto.BbsParam" resultType="map">
-		select b.bbsseq, title, wdate, rdate, ref, likecount, readcount, thumnail,
-			nickname, ifnull(cnt, 0) cmtcount
+		select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail,
+			nickname, profile, ifnull(cnt, 0) cmtcount
 		from member a, (select row_number()over(order by ${order} desc) rnum,
-			memberseq, bbsseq, title, wdate, rdate, ref, likecount, readcount, thumnail
+			memberseq, bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail
 			from bbs
 			where bbstag=#{bbstag} and del=0
 			order by ${order} desc) b
@@ -22,7 +22,7 @@
 	
 	<select id="bbsDetail" parameterType="Integer" resultType="map">
 		select bbsseq, title, content, wdate, likecount, readcount, del, bbstag,
-			b.memberseq, b.nickname
+			b.memberseq, b.nickname, profile
 		from bbs a, member b
 		where a.memberseq=b.memberseq
 			and bbsseq=#{bbsseq}
