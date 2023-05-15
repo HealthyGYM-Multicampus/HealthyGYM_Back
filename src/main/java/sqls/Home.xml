@@ -9,7 +9,7 @@
 		from (select row_number()over(order by readcount desc) rnum,
 			bbsseq, bbstag, title, likecount, readcount
 			from bbs
-			where bbstag in (2, 3, 4) 
+			where bbstag in (2, 3, 4, 11) 
 				and wdate >= DATE_SUB(NOW(), INTERVAL 7 DAY)
 				and likecount >= 1
 				and del=0

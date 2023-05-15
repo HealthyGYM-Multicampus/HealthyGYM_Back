@@ -44,6 +44,12 @@
 		where email=#{email}
 	</select>
 	
+	<select id="checkAuth" parameterType="String" resultType="Integer">
+		select auth
+		from member
+		where email=#{email}
+	</select>
+	
 	<insert id="signup" parameterType="com.mul.HealthyGYM.Dto.MemberDto">
 		insert into member(email, pwd, nickname, auth, profile, authority, provider)
 		values(#{email}, #{pwd}, #{nickname}, 1, "default.png", "ROLE_USER", #{provider})

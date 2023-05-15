@@ -16,6 +16,7 @@ public interface MemberDao {
 	int existsByEmail(String email);
 	int existsByNickname(String nickname);
 	String checkProvider(String email);
+	int checkAuth(String email);
 	
 	int signup(MemberDto dto);
 	int signupOAuth(MemberDto dto);
