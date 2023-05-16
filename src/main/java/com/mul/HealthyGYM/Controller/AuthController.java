@@ -72,11 +72,16 @@ public class AuthController {
 		System.out.println("login " + new Date());
 		
 		Map<String, Object> map = new HashMap<>();
-		map.put("token", authService.login(dto));
 		
 		MemberDto mem = memberService.findByEmail(dto.getEmail());
+		if(mem.getAuth() == 2) {
+			map.put("token", "deactivated");
+			return map;
+		}
 		map.put("seq", mem.getMemberseq());
 		map.put("profile", mem.getProfile());
+		map.put("token", authService.login(dto));
+		
 		return map;
 	}
 
@@ -137,11 +142,17 @@ public class AuthController {
         
         // 3. 가입 여부 확인
         if(memberService.existsByEmail(email)) {
-        	// 동일한 이메일이 다른 서비스(제공자)로 가입되어있으면 반려
+        	// 동일한 이메일이 다른 서비스(제공자)로 가입되어있으면 로그인 반려
         	String provider = memberService.checkProvider(email);
         	if(!provider.equals("kakao")) {
         		map.put("provider", provider);
         		System.out.println("다른 서비스(제공자)로 가입되어있음");
+        		return map;
+        	}
+        	// 활동 정지 회원이면 로그인 반려
+        	if(memberService.checkAuth(email) == 2) {
+        		map.put("provider", "deactivated");
+        		System.out.println("활동 정지 회원");
         		return map;
         	}
         }
@@ -234,6 +245,12 @@ public class AuthController {
         	if(!provider.equals("google")) {
         		map.put("provider", provider);
         		System.out.println("다른 서비스(제공자)로 가입되어있음");
+        		return map;
+        	}
+        	// 활동 정지 회원이면 로그인 반려
+        	if(memberService.checkAuth(email) == 2) {
+        		map.put("provider", "deactivated");
+        		System.out.println("활동 정지 회원");
         		return map;
         	}
         }

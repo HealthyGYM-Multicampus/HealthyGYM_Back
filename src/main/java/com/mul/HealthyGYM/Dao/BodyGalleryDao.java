@@ -49,10 +49,10 @@ public interface BodyGalleryDao {
     void updateBodyReport(int bbsseq);
     
     // 댓글 작성
-    void saveBodyComment(Map<String, Object> commentMap);
+    void saveBodyComment(BbsCommentDto bbsCommentDto);
     
     // 대댓글 작성
-    void saveBodyReply(Map<String, Object> replyMap);
+    void saveBodyReply(BbsCommentDto bbsCommentDto);
     
     // 댓글 조회
     List<Map<String, Object>> findAllBodyComment(int bbsseq);
@@ -61,13 +61,13 @@ public interface BodyGalleryDao {
     void updateBodyComment(BbsCommentDto bbsCommentDto);
     
     // 대댓글 있는 경우 댓글 삭제
-    void updateComment(Map<String, Object> commentMap);
+    void updateComment(BbsCommentDto bbsCommentDto);
     
     // 대댓글이 없는 경우 댓글 삭제
     void deleteCommentWithoutReply(int commentseq);
     
     // 댓글이 있는 경우 대댓글 삭제
-    void updateReply(Map<String, Object> replyMap);
+    void updateReply(BbsCommentDto bbsCommentDto);
     
     // 댓글, 대댓글 일괄 삭제
     void deleteAllReplies(int commentseq);

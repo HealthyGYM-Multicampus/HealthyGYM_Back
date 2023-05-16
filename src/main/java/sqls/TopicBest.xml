@@ -4,7 +4,7 @@
 
 <mapper namespace="com.mul.HealthyGYM.Dao.TopicBestDao">
 
-<!-- 토픽베스트 -->
+<!-- 토픽베스트 : 발표할 때 보여주기 위해 likecount 1로 변경 -->
 <select id="findAllBest" parameterType="com.mul.HealthyGYM.Dto.BbsParam" resultType="map">
 	 select b.bbsseq, title, content, wdate, rdate, ref, likecount, readcount, thumnail, bbstag,
 			profile, nickname, ifnull(cnt, 0) cmtcount
@@ -14,7 +14,7 @@
 		  from bbs
 		  where bbstag in (2, 3, 4) 
 		  and wdate >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-		  and likecount >= 10
+		  and likecount >= 1
 		  and del=0
 		  order by ${order} desc) b
 	 LEFT OUTER JOIN (select count(*) cnt, bbsseq

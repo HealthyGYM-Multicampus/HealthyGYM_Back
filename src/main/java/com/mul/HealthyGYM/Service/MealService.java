@@ -49,9 +49,9 @@ public class MealService {
 			foodDto.setBbsseq(bbsseq);		// 어떤 게시물에 해당하는 건지 객체마다 설정.
 			
 			count += mealDao.writemeal2(foodDto);
-			System.out.println(foodDto.toString());
+//			System.out.println(foodDto.toString());
 		}
-		System.out.println(count + " : count");
+//		System.out.println(count + " : count");
 		return count>0?true:false;
 	}
 
@@ -64,10 +64,12 @@ public class MealService {
 	    params.put("select", select);
 	    params.put("memberseq", memberseq);
 	    
-	    
+
 	    List<BbsDto> bbslist = mealDao.selectBbsList(params);
 	    
 	    List<BbsFoodDto> result = new ArrayList<>();
+	    
+	    Map<String, Object> resultset = new HashMap<>();
 		
 	    for (BbsDto bbs : bbslist) {
 	        Map<String, Integer> params2 = new HashMap<>();
@@ -75,6 +77,7 @@ public class MealService {
 	        List<FoodDto> foodlist = mealDao.selectFoodList(params2);
 	        int commentcnt = mealDao.getcmtcnt(bbs.getBbsseq());
 	        // System.out.println(commentcnt);
+	        String profile = mealDao.getbbsprofile(bbs.getBbsseq());
 	        
 	        
 	        params2.put("memberseq", memberseq);
@@ -84,10 +87,13 @@ public class MealService {
 	        	islike = true;
 	        }
 	        
-	        BbsFoodDto bbsFoodDto = new BbsFoodDto(bbs, foodlist.toArray(new FoodDto[0]), islike, commentcnt);
+	        BbsFoodDto bbsFoodDto = new BbsFoodDto(bbs, foodlist.toArray(new FoodDto[0]), islike, commentcnt, profile);
 	        // System.out.println(bbsFoodDto.toString());
 	        result.add(bbsFoodDto);
 	    }
+	    
+	    
+	    
 	    
 	    return result;
 	}
@@ -137,13 +143,15 @@ public class MealService {
 
 
 	
-	public List<MealCommentMemberDto> getmealcomments(int bbsseq, int memberseq) {
+	public List<MealCommentMemberDto> getmealcomments(int bbsseq) {
 		
 		List<MealCommentMemberDto> result = new ArrayList<>();
 		
 		List<BbsCommentDto> commentlist = mealDao.getmealcomments(bbsseq);
 		for (BbsCommentDto cmt : commentlist) {
-			MemberDto member = mealDao.getwritorprofile(memberseq);
+			
+			MemberDto member = mealDao.getwritorprofile(cmt.getMemberseq());
+			// System.out.println(member.toString());
 			
 			MealCommentMemberDto mealcmtmemdto = new MealCommentMemberDto(cmt, member);
 			
@@ -168,6 +176,65 @@ public class MealService {
 		int n = mealDao.writemealcomment2(params);
 		
 		return n>0?true:false;
+	}
+
+
+	public String getnickname(int memberseq) {
+		
+		String result = mealDao.getnickname(memberseq);
+		return result;
+	}
+
+
+	public Map<String, Object> mealupdate(int bbsseq) {
+		
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		 Map<String, Integer> params = new HashMap<>();
+		params.put("bbsseq", bbsseq);
+		
+		List<FoodDto> foodlist = mealDao.selectFoodList(params);
+		BbsDto bbsdto = mealDao.selectBbsDto(params);
+		
+		
+		result.put("foodlist", foodlist);
+		result.put("bbsdto", bbsdto);
+		
+		
+		return result;
+	}
+
+
+	public int updatemeal1(BbsDto bbsdto) {
+		int count = mealDao.updatemeal1(bbsdto);
+		return count;
+	}
+
+
+	public boolean updatemeal2(List<FoodDto> foodDtoList, int bbsseq) {
+		
+		int count = 0;
+		System.out.println("writemeal2: bbsseq = " + bbsseq);
+		
+		mealDao.deletemeal(bbsseq);	// 기존의 연결된 모든 meal을 끊고 .. 
+		
+		// 새롭게 등록
+		for (FoodDto foodDto : foodDtoList) {
+			foodDto.setBbsseq(bbsseq);		// 어떤 게시물에 해당하는 건지 객체마다 설정.
+			
+			count += mealDao.writemeal2(foodDto);
+			System.out.println(foodDto.toString());
+		}
+		System.out.println(count + " : count");
+		return count>0?true:false;
+	}
+
+
+	public boolean deletemealcomment(int commentseq) {
+		
+		int count = 0;
+		count += mealDao.deletemealcomment(commentseq);
+		
+		return count>0?true:false;
 	}
 
 

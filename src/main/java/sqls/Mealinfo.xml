@@ -151,6 +151,48 @@
 		values(#{memberseq},#{bbsseq},#{cmtcontent},now(),0,0,#{ref})
 	</insert>
 	
+	<select id="getnickname" parameterType="Integer" resultType="String">
+		select nickname
+		from member
+		where memberseq = #{memberseq}
+	</select>
+	
+	<select id="selectBbsDto" parameterType="java.util.HashMap" resultType="com.mul.HealthyGYM.Dto.BbsDto">
+		select *
+		from bbs
+		where bbsseq = #{bbsseq}
+	</select>
+	
+	<update id="updatemeal1" parameterType="com.mul.HealthyGYM.Dto.BbsDto">
+	  update bbs
+	  set title = #{title}, content = #{content}, rdate = now(), bbstag = #{bbstag}
+	  where bbsseq = #{bbsseq}
+	</update>
+
+	
+	<delete id="deletemeal" parameterType="Integer">
+		delete from meal_ingredients
+		where bbsseq = #{bbsseq}
+	
+	</delete>
+	
+	<update id="deletemealcomment" parameterType="Integer">
+		update bbs_comment
+		set cmtdel = 1
+		where commentseq = #{commentseq}
+	
+	</update>
+	
+	<select id="getbbsprofile" parameterType="Integer" resultType="String">
+		select m.profile
+		from bbs AS b
+		INNER JOIN member AS m ON b.memberseq = m.memberseq
+		where b.bbsseq = #{bbsseq};
+	</select>
+	
+	
+
+
 </mapper>
 
 
