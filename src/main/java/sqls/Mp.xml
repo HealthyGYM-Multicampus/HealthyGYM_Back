@@ -155,4 +155,26 @@
 		WHERE memberseq = #{memberseq}
 	</update>
 
+	<insert id="reqFollow" parameterType="com.mul.HealthyGYM.Dto.FollowDto">
+		insert into follow (memberseq, foltarget)
+		values(#{memberseq}, #{foltarget})
+	</insert>
+
+	<delete id="reqUnFollow" parameterType="com.mul.HealthyGYM.Dto.FollowDto">
+		DELETE FROM follow
+		WHERE memberseq = #{memberseq} and foltarget = #{foltarget}
+	</delete>
+
+	<select id="confirmFollow" parameterType="com.mul.HealthyGYM.Dto.FollowDto" resultType="Integer">
+		SELECT COUNT(*)
+		FROM follow
+		WHERE memberseq = #{memberseq} AND foltarget = #{foltarget}
+	</select>
+
+	<select id="findByNickname" parameterType="String" resultType="Integer">
+		SELECT memberseq
+		FROM member
+		WHERE nickname = #{nickname}
+	</select>
+
 </mapper>

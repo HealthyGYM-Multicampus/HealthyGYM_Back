@@ -1,21 +1,32 @@
 package com.mul.HealthyGYM.Dto;
 
 public class FollowDto {
+    private int followseq;
     private int memberseq;
     private String foltarget;
     private String profile;
     private String gender;
     private String mbti;
 
-    public FollowDto() {
-    }
 
-    public FollowDto(int memberseq, String foltarget, String profile, String gender, String mbti) {
+    public FollowDto(int followseq, int memberseq, String foltarget, String profile, String gender, String mbti) {
+        this.followseq = followseq;
         this.memberseq = memberseq;
         this.foltarget = foltarget;
         this.profile = profile;
         this.gender = gender;
         this.mbti = mbti;
+    }
+
+    public FollowDto() {
+    }
+
+    public int getFollowseq() {
+        return followseq;
+    }
+
+    public void setFollowseq(int followseq) {
+        this.followseq = followseq;
     }
 
     public int getMemberseq() {
@@ -61,7 +72,8 @@ public class FollowDto {
     @Override
     public String toString() {
         return "FollowDto{" +
-                "memberseq=" + memberseq +
+                "followseq=" + followseq +
+                ", memberseq=" + memberseq +
                 ", foltarget='" + foltarget + '\'' +
                 ", profile='" + profile + '\'' +
                 ", gender='" + gender + '\'' +

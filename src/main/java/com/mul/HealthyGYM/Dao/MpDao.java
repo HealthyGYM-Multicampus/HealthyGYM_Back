@@ -45,4 +45,12 @@ public interface MpDao {
     void bodyComDelete(int bodycomseq);
 
     void memberDelete(MemberDto memberDto);
+
+    void reqFollow(FollowDto followDto);
+
+    void reqUnFollow(FollowDto followDto);
+
+    int confirmFollow(FollowDto followDto);
+
+    int findByNickname(String nickname);
 }
