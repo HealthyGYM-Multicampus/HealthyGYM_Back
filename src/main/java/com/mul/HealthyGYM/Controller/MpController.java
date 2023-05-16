@@ -195,10 +195,12 @@ public class MpController {
     @PostMapping(value = "/mypage/mybbs")
     public List<Map<String, Object>> bbsImageList(@RequestBody UserBbsParam userBbsParam) {
         System.out.println("bbsImageList" + new Date());
+
         int tag = userBbsParam.getBbstag();
         if(tag != 0){
             return service.myBbsList(userBbsParam);
         } else {
+            System.out.println(service.myAllBbsList(userBbsParam).toString());
             return service.myAllBbsList(userBbsParam);
         }
     }
@@ -256,10 +258,50 @@ public class MpController {
 
         String ranEmail = UUID.randomUUID() + "@healthygym.com";
         dto.setEmail(ranEmail);
-        dto.setAuth(2);
+        dto.setAuth(3);
 
         service.memberDelete(dto);
 
         return "ok";
     }
+
+    @PostMapping(value = "/request/follow")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public boolean reqFollow(@RequestBody FollowDto followDto) {
+        System.out.println("reqFollow " + new Date());
+        System.out.println(followDto.toString());
+
+        service.reqFollow(followDto);
+
+        return true;
+    }
+
+    @PostMapping(value = "/request/unfollow")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public boolean reqUnFollow(@RequestBody FollowDto followDto) {
+        System.out.println("reqUnFollow " + new Date());
+
+        service.reqUnFollow(followDto);
+
+        return true;
+    }
+
+    @PostMapping(value = "/confirm/follow")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public boolean confirmFollow(@RequestBody FollowDto followDto) {
+        System.out.println("confirmFollow " + new Date());
+
+        System.out.println(followDto.toString());
+
+        int result = service.confirmFollow(followDto);
+        System.out.println(result);
+
+        if(result == 0){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    //findbynickname
 }

@@ -261,4 +261,24 @@ public class MpService {
     public void memberDelete(MemberDto memberDto) {
         dao.memberDelete(memberDto);
     }
+
+    public void reqFollow(FollowDto followDto) {
+        dao.reqFollow(followDto);
+    }
+
+    public void reqUnFollow(FollowDto followDto) {
+        dao.reqUnFollow(followDto);
+    }
+
+    public int confirmFollow(FollowDto followDto) {
+       int result = dao.confirmFollow(followDto);
+
+       return result;
+    }
+
+    public int findByNickname(String nickname) {
+        int result = dao.findByNickname(nickname);
+
+        return result;
+    }
 }
