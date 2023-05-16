@@ -93,15 +93,15 @@
 </update>
 
 <!-- 댓글 작성 -->
-<insert id="saveBodyComment" parameterType="map">
-	insert into bbs_comment (memberseq, bbsseq, cmtcontent, cmtdel, step, ref)
-  	values (#{memberseq}, #{bbsseq}, #{cmtcontent}, 0, 0, (SELECT COALESCE(MAX(ref), 0) + 1 FROM bbs_comment c WHERE c.bbsseq = #{bbsseq}))
+<insert id="saveBodyComment" parameterType="com.mul.HealthyGYM.Dto.BbsCommentDto">
+	insert into bbs_comment (memberseq, bbsseq, cmtcontent, regdate, cmtdel, step, ref)
+  	values (#{memberseq}, #{bbsseq}, #{cmtcontent}, now(), 0, 0, (SELECT COALESCE(MAX(ref), 0) + 1 FROM bbs_comment c WHERE c.bbsseq = #{bbsseq}))
 </insert>
 
 <!-- 대댓글 작성 -->
-<insert id="saveBodyReply" parameterType="map">
-	insert into bbs_comment (memberseq, bbsseq, cmtcontent, cmtdel, step, ref)
-  	values (#{memberseq}, #{bbsseq}, #{cmtcontent}, 0, (SELECT COALESCE(MAX(step), 0) + 1 FROM bbs_comment c WHERE c.ref = #{ref}), #{ref})
+<insert id="saveBodyReply" parameterType="com.mul.HealthyGYM.Dto.BbsCommentDto">
+	insert into bbs_comment (memberseq, bbsseq, cmtcontent, regdate, cmtdel, step, ref)
+  	values (#{memberseq}, #{bbsseq}, #{cmtcontent}, now(), 0, (SELECT COALESCE(MAX(step), 0) + 1 FROM bbs_comment c WHERE c.ref = #{ref}), #{ref})
 </insert>	
 
 <!-- 댓글 리스트 조회 -->
@@ -117,12 +117,12 @@
 <!-- 댓글 수정 -->
 <update id="updateBodyComment" parameterType="com.mul.HealthyGYM.Dto.BbsCommentDto">
 	update bbs_comment
-	set cmtcontent=#{cmtcontent}
+	set cmtcontent=#{cmtcontent}, regdate=now()
 	where commentseq=#{commentseq}
 </update>
 
 <!-- 댓글 삭제 시 대댓글이 있는 경우 댓글 수정 -->
-<update id="updateComment" parameterType="map">
+<update id="updateComment" parameterType="com.mul.HealthyGYM.Dto.BbsCommentDto">
   UPDATE bbs_comment 
   SET cmtcontent = '삭제된 댓글입니다', cmtdel = 1 
   WHERE commentseq = #{commentseq} 
@@ -138,7 +138,7 @@
 </delete>
 
 <!-- 대댓글 삭제 시 부모댓글이 있는 경우 대댓글 수정 -->
-<update id="updateReply" parameterType="map">
+<update id="updateReply" parameterType="com.mul.HealthyGYM.Dto.BbsCommentDto">
   UPDATE bbs_comment SET cmtcontent = '삭제된 댓글입니다', cmtdel = 1 WHERE commentseq = #{commentseq} 
   AND EXISTS(SELECT commentseq FROM bbs_comment 
              WHERE ref = (SELECT ref FROM bbs_comment WHERE commentseq = #{commentseq}) 

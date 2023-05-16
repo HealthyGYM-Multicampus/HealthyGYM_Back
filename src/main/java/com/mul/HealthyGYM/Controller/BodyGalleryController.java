@@ -100,5 +100,60 @@ public class BodyGalleryController {
 		return ResponseEntity.ok("Successfully updated");
 	}
 	
+	@PostMapping(value = "/saveBodyComment")
+    public ResponseEntity<String> saveBodyComment(@RequestBody BbsCommentDto commentDto) {
+		System.out.println("saveBodyComment 댓글 작성");
+		service.saveBodyComment(commentDto);
+        return ResponseEntity.ok("Successfully Comment saved");
+    }
+
+    @PostMapping(value = "/saveBodyReply")
+    public ResponseEntity<String> saveBodyReply(@RequestBody BbsCommentDto commentDto) {
+    	System.out.println("saveBodyReply 대댓글 작성");
+    	service.saveBodyComment(commentDto);
+        return ResponseEntity.ok("Successfully Reply saved");
+    }
+
+    @GetMapping(value = "/findAllBodyComment/{bbsseq}")
+    public ResponseEntity<List<Map<String, Object>>> findAllBodyComment(@PathVariable int bbsseq) {
+    	System.out.println("findAllBodyComment 댓글 리스트 조회");
+    	List<Map<String, Object>> comments = service.findAllBodyComment(bbsseq);
+        return ResponseEntity.ok(comments);
+    }
+
+    @PostMapping(value = "/updateBodyComment")
+    public ResponseEntity<String> updateBodyComment(@RequestBody BbsCommentDto commentDto) {
+    	System.out.println("updateBodyComment 댓글 수정");
+    	service.updateBodyComment(commentDto);
+        return ResponseEntity.ok("Successfully Comment updated");
+    }
+    
+    @PostMapping(value = "/updateComment/{commentseq}")
+    public ResponseEntity<String> updateComment(@PathVariable int commentseq, @RequestBody BbsCommentDto commentDto) {
+    	System.out.println("updateComment 대댓글이 있는 경우 댓글 수정");
+        service.updateComment(commentDto);
+        return ResponseEntity.ok("Successfully Comment updated");
+    }
+
+    @PostMapping(value = "/deleteCommentWithoutReply/{commentseq}")
+    public ResponseEntity<String> deleteCommentWithoutReply(@PathVariable int commentseq) {
+    	System.out.println("deleteCommentWithoutReply 대댓글이 없는 경우 댓글 삭제");
+    	service.deleteCommentWithoutReply(commentseq);
+        return ResponseEntity.ok("Successfully Comment deleted");
+    }
+
+    @PostMapping(value = "/updateReply")
+    public ResponseEntity<String> updateReply(@PathVariable int replyseq, @RequestBody BbsCommentDto commentDto) {
+    	System.out.println("updateReply 부모댓글이 있는 경우 대댓글 수정");
+        service.updateReply(commentDto);
+        return ResponseEntity.ok("Successfully Reply updated");
+    }
+
+    @PostMapping(value = "/deleteReplies/{commentseq}")
+    public ResponseEntity<String> deleteReplies(@PathVariable int commentseq) {
+    	System.out.println("deleteReplies 댓글과 대댓글 일괄 삭제");
+    	service.deleteAllReplies(commentseq);
+        return ResponseEntity.ok("Successfully Replies deleted");
+    }
 	
 }
