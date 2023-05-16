@@ -3,6 +3,7 @@ package com.mul.HealthyGYM.Dto;
 import java.math.BigInteger;
 
 public class FoodDto {
+		private int foodseq;
 		private int bbsseq;
 		private int msgseq;
 		private int whenmeal;
@@ -25,10 +26,15 @@ public class FoodDto {
 			super();
 		}
 
-		public FoodDto(String desckor, String servingwt, String nutrcont1, String nutrcont2, String nutrcont3,
-				String nutrcont4, String nutrcont5, String nutrcont6, String nutrcont7, String nutrcont8,
-				String nutrcont9, String bgnyear, String animalplant) {
+		
+		
+		
+		
+		public FoodDto(int foodseq, String desckor, String servingwt, String nutrcont1, String nutrcont2,
+				String nutrcont3, String nutrcont4, String nutrcont5, String nutrcont6, String nutrcont7,
+				String nutrcont8, String nutrcont9, String bgnyear, String animalplant) {
 			super();
+			this.foodseq = foodseq;
 			this.desckor = desckor;
 			this.servingwt = servingwt;
 			this.nutrcont1 = nutrcont1;
@@ -44,7 +50,14 @@ public class FoodDto {
 			this.animalplant = animalplant;
 		}
 
-		
+		public int getFoodseq() {
+			return foodseq;
+		}
+
+		public void setFoodseq(int foodseq) {
+			this.foodseq = foodseq;
+		}
+
 		public int getWhenmeal() {
 			return whenmeal;
 		}
