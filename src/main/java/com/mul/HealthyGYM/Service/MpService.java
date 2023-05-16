@@ -83,7 +83,6 @@ public class MpService {
     }
 
     public InbodyDto ocr(String filepath, int memberseq, String filename) {
-        System.out.println("OCR메서드 진입");
 
         InbodyDto result = new InbodyDto();
 
@@ -183,7 +182,6 @@ public class MpService {
             return result;
         }
 
-        System.out.println("response.toString():"+response.toString());
         return result;
     }
 

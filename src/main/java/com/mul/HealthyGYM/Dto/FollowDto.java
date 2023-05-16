@@ -7,7 +7,15 @@ public class FollowDto {
     private String profile;
     private String gender;
     private String mbti;
+    private int userseq;
 
+    public int getUserseq() {
+        return userseq;
+    }
+
+    public void setUserseq(int userseq) {
+        this.userseq = userseq;
+    }
 
     public FollowDto(int followseq, int memberseq, String foltarget, String profile, String gender, String mbti) {
         this.followseq = followseq;
@@ -78,6 +86,7 @@ public class FollowDto {
                 ", profile='" + profile + '\'' +
                 ", gender='" + gender + '\'' +
                 ", mbti='" + mbti + '\'' +
+                ", userseq=" + userseq +
                 '}';
     }
 }

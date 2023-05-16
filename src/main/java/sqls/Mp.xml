@@ -33,7 +33,7 @@
 	</update>
 
 	<select id="followingMembers" parameterType="Integer" resultType="com.mul.HealthyGYM.Dto.FollowDto">
-		SELECT m.memberseq, f.foltarget, m.profile, f.memberseq, m2.mbti, m2.gender
+		SELECT m.memberseq as userseq, f.foltarget, m.profile, f.memberseq, m2.mbti, m2.gender
 		FROM follow f
 				 JOIN member m ON m.nickname = f.foltarget
 				 join memberinfo m2 on m.memberseq = m2.memberseq
@@ -42,7 +42,7 @@
 
 	<select id="followerMembers" parameterType="Integer"
 			resultType="com.mul.HealthyGYM.Dto.FollowDto">
-		SELECT f.memberseq, m.nickname as foltarget, m.profile, m2.mbti, m2.gender
+		SELECT f.memberseq as userseq, m.nickname as foltarget, m.profile, m2.mbti, m2.gender
 		FROM follow f
 				 JOIN member m ON m.memberseq = f.memberseq
 				 join memberinfo m2 on m.memberseq = m2.memberseq
