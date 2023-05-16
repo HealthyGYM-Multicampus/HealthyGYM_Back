@@ -62,32 +62,32 @@ public class BodyGalleryService {
 		dao.updateBodyReport(bbsseq);
 	}
 	
-	public void saveBodyComment(Map<String, Object> commentMap) {
-		dao.saveBodyComment(commentMap);
+	public void saveBodyComment(BbsCommentDto commentDto) {
+		dao.saveBodyComment(commentDto);
 	}
 	
-	public void saveBodyReply(Map<String, Object> replyMap) {
-		dao.saveBodyReply(replyMap);
+	public void saveBodyReply(BbsCommentDto commentDto) {
+		dao.saveBodyReply(commentDto);
 	}
 	
 	public List<Map<String, Object>> findAllBodyComment(int bbsseq) {
 		return dao.findAllBodyComment(bbsseq);
 	}
 	
-	public void updateBodyComment(BbsCommentDto bbsCommentDto) {
-		dao.updateBodyComment(bbsCommentDto);
+	public void updateBodyComment(BbsCommentDto commentDto) {
+		dao.updateBodyComment(commentDto);
+	}
+	
+	public void updateComment(BbsCommentDto commentDto) {
+		dao.updateComment(commentDto);
 	}
 	
 	public void deleteCommentWithoutReply(int commentseq) {
 		dao.deleteCommentWithoutReply(commentseq);
 	}
 	
-	public void updateComment(Map<String, Object> commentMap) {
-		dao.updateComment(commentMap);
-	}
-	
-	public void updateReply(Map<String, Object> replyMap) {
-		dao.updateReply(replyMap);
+	public void updateReply(BbsCommentDto commentDto) {
+		dao.updateReply(commentDto);
 	}
 	
 	public void deleteAllReplies(int commentseq) {
