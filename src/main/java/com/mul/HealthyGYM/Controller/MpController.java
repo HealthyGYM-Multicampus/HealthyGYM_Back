@@ -82,6 +82,7 @@ public class MpController {
         Map<String, Object> map = new HashMap<>();
         map.put("followDtoList", followDtoList);
         map.put("followNum", followNum);
+
         return map;
     }
 
@@ -97,6 +98,7 @@ public class MpController {
         Map<String, Object> map = new HashMap<>();
         map.put("followDtoList", followDtoList);
         map.put("followerNum", followerNum);
+
         return map;
     }
 
@@ -200,7 +202,6 @@ public class MpController {
         if(tag != 0){
             return service.myBbsList(userBbsParam);
         } else {
-            System.out.println(service.myAllBbsList(userBbsParam).toString());
             return service.myAllBbsList(userBbsParam);
         }
     }
@@ -230,7 +231,6 @@ public class MpController {
     @PostMapping(value = "/userbodycom")
     public String bodyComSave(@RequestBody InbodyDto inbodyDto){
         System.out.println("userBodyCom" + new Date());
-        System.out.println(inbodyDto.toString());
 
         service.bodyComSave(inbodyDto);
 
@@ -269,7 +269,6 @@ public class MpController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public boolean reqFollow(@RequestBody FollowDto followDto) {
         System.out.println("reqFollow " + new Date());
-        System.out.println(followDto.toString());
 
         service.reqFollow(followDto);
 
@@ -291,10 +290,7 @@ public class MpController {
     public boolean confirmFollow(@RequestBody FollowDto followDto) {
         System.out.println("confirmFollow " + new Date());
 
-        System.out.println(followDto.toString());
-
         int result = service.confirmFollow(followDto);
-        System.out.println(result);
 
         if(result == 0){
             return false;
