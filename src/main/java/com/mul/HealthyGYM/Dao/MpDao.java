@@ -52,5 +52,4 @@ public interface MpDao {
 
     int confirmFollow(FollowDto followDto);
 
-    int findByNickname(String nickname);
 }

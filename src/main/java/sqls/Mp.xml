@@ -171,10 +171,4 @@
 		WHERE memberseq = #{memberseq} AND foltarget = #{foltarget}
 	</select>
 
-	<select id="findByNickname" parameterType="String" resultType="Integer">
-		SELECT memberseq
-		FROM member
-		WHERE nickname = #{nickname}
-	</select>
-
 </mapper>
