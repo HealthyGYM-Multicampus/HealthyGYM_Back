@@ -273,10 +273,4 @@ public class MpService {
 
        return result;
     }
-
-    public int findByNickname(String nickname) {
-        int result = dao.findByNickname(nickname);
-
-        return result;
-    }
 }
