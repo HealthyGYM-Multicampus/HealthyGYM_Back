@@ -299,5 +299,53 @@ public class MpController {
         }
     }
 
-    //findbynickname
+    @PostMapping(value = "/confirm/mate")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public boolean confirmMate(@RequestBody FollowDto followDto) {
+        System.out.println("confirmMate " + new Date());
+
+        if(followDto.getMemberseq() == followDto.getUserseq()) {
+            return true;
+        } else if(followDto.getMemberseq()==0){
+            return false;
+        } else {
+            FollowDto followDto1 = new FollowDto();
+            FollowDto followDto2 = new FollowDto();
+
+            int loginMemberseq = followDto.getMemberseq();
+            String loginNickname = service.findMemberById(loginMemberseq).getNickname();
+
+            int userMemberseq = followDto.getUserseq();
+            String userNickname = service.findMemberById(userMemberseq).getNickname();
+
+            followDto1.setMemberseq(loginMemberseq);
+            followDto2.setMemberseq(userMemberseq);
+            followDto1.setFoltarget(userNickname);
+            followDto2.setFoltarget(loginNickname);
+
+            int result1 = service.confirmFollow(followDto1);
+            int result2 = service.confirmFollow(followDto2);
+
+            if (result1 != 0 && result2 != 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    @PostMapping(value = "/confirm/follow/me")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    public boolean confirmFollowMe(@RequestBody MemberDto memberDto) {
+        System.out.println("confirmFollowMe " + new Date());
+
+        int memberseq = memberDto.getMemberseq();
+        String nickname = service.findMemberById(memberseq).getNickname();
+
+        if(memberDto.getNickname().equals(nickname)){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
