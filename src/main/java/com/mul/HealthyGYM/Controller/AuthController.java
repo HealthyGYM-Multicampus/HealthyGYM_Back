@@ -74,6 +74,12 @@ public class AuthController {
 		Map<String, Object> map = new HashMap<>();
 		
 		MemberDto mem = memberService.findByEmail(dto.getEmail());
+		// 가입되지 않은 이메일
+		if(mem == null) {
+			map.put("token", "null");
+			return map;
+		}
+		// 활동 정지 계정
 		if(mem.getAuth() == 2) {
 			map.put("token", "deactivated");
 			return map;
