@@ -67,7 +67,7 @@
 	
 	<update id="updatePwd" parameterType="com.mul.HealthyGYM.Dto.MemberDto">
 		update member
-		set pwd=#{pwd}
+		set pwd=#{pwd}, mailkey=#{mailkey}
 		where email=#{email}
 	</update>
 	

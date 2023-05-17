@@ -61,6 +61,7 @@ public class MemberService {
 	
 	public boolean updatePwd(MemberDto dto) {
 		dto.setPwd(passwordEncoder.encode(dto.getPwd()));
+		dto.setMailkey("");
 		return dao.updatePwd(dto) > 0;
 	}
 	
@@ -96,7 +97,7 @@ public class MemberService {
                 "<h1 style='color:black;'>건강해GYM 비밀번호 재설정</h1>" +
                 "<p style='font-size:18px; color:#333; margin-top:30px; margin-bottom:20px;'>안녕하세요, " + dto.getNickname() + "님!</p>" +
                 "<p style='font-size:16px; color:#555; margin-top:20px; margin-bottom:30px;'>비밀번호를 재설정 하시려면 아래 버튼을 클릭해주세요.</p>" +
-                "<a href='http://localhost:9100/password/update?email=" + dto.getEmail() + "&mail_key=" + dto.getMailkey() + "' style='display:inline-block; background-color:#FF4136; color:#fff; font-size:16px; text-align:center; padding:12px 20px; border-radius:5px; text-decoration:none; margin-bottom:30px;'>비밀번호 재설정</a>" +
+                "<a href='http://localhost:9100/password/update?email=" + dto.getEmail() + "&mail_key=" + dto.getMailkey() + "' style='display:inline-block; background-color:#5271FF; color:#fff; font-size:16px; text-align:center; padding:12px 20px; border-radius:5px; text-decoration:none; margin-bottom:30px;'>비밀번호 재설정</a>" +
                 "<p style='font-size:14px; color:#999; margin-top:30px;'>본 이메일은 발신 전용입니다. 문의 사항은 고객센터를 이용해주세요.</p>" +
                 "<p style='font-size:14px; color:#999;'>건강해GYM</p>" +
                 "</div>";		
