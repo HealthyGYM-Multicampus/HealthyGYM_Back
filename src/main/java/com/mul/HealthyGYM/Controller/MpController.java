@@ -262,6 +262,8 @@ public class MpController {
 
         service.memberDelete(dto);
 
+        service.followDelete(dto);
+
         return "ok";
     }
 

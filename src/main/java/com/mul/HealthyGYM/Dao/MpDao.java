@@ -52,4 +52,5 @@ public interface MpDao {
 
     int confirmFollow(FollowDto followDto);
 
+    void followDelete(MemberDto dto);
 }

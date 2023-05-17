@@ -273,4 +273,8 @@ public class MpService {
 
        return result;
     }
+
+    public void followDelete(MemberDto dto) {
+        dao.followDelete(dto);
+    }
 }
