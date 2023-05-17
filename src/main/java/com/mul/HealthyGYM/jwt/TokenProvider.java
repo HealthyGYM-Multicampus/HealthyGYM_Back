@@ -32,7 +32,7 @@ import io.jsonwebtoken.security.Keys;
 public class TokenProvider {
 	private Key key;
 	//private final String secretKey;	// echo 'spring-boot-security-jwt-healthyzym-project-spring-boot-security-jwt' | base64
-	private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
+	private static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60;            // 60분
     private static long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
 	
 	public TokenProvider(@Value("${jwt.secret}") String secretKey) {

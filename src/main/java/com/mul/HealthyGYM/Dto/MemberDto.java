@@ -9,7 +9,6 @@ public class MemberDto {
     private int auth;
     private String authority;
     private String provider;	// own, google, kakao
-    private int mailauth;
     private String mailkey;
 
 	private int isreadcnt;	// 대화 목록당 읽지 않은 메시지의 개수
@@ -43,7 +42,7 @@ public class MemberDto {
 	}
 
 	public MemberDto(int memberseq, String email, String pwd, String profile, String nickname, int auth,
-			String authority, String provider, int mailauth, String mailkey) {
+			String authority, String provider, String mailkey) {
 		super();
 		this.memberseq = memberseq;
 		this.email = email;
@@ -53,11 +52,10 @@ public class MemberDto {
 		this.auth = auth;
 		this.authority = authority;
 		this.provider = provider;
-		this.mailauth = mailauth;
 		this.mailkey = mailkey;
 	}
 
-    public MemberDto(int memberseq, String email, String pwd, int auth, String profile, int mailauth, String mailkey,
+    public MemberDto(int memberseq, String email, String pwd, int auth, String profile, String mailkey,
 			String nickname, int isreadcnt, String lastletter, String wdate) {
 		super();
 		this.memberseq = memberseq;
@@ -65,7 +63,6 @@ public class MemberDto {
 		this.pwd = pwd;
 		this.auth = auth;
 		this.profile = profile;
-		this.mailauth = mailauth;
 		this.mailkey = mailkey;
 		this.nickname = nickname;
 		this.isreadcnt = isreadcnt;
@@ -163,14 +160,6 @@ public class MemberDto {
 		this.provider = provider;
 	}
 
-	public int getMailauth() {
-		return mailauth;
-	}
-
-	public void setMailauth(int mailauth) {
-		this.mailauth = mailauth;
-	}
-
 	public String getMailkey() {
 		return mailkey;
 	}
@@ -183,7 +172,7 @@ public class MemberDto {
 	public String toString() {
 		return "MemberDto [memberseq=" + memberseq + ", email=" + email + ", pwd=" + pwd + ", profile=" + profile
 				+ ", nickname=" + nickname + ", auth=" + auth + ", authority=" + authority + ", provider=" + provider
-				+ ", mailauth=" + mailauth + ", mailkey=" + mailkey + "]";
+				+ ", mailkey=" + mailkey + "]";
 	}
 
 }
